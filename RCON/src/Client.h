@@ -37,6 +37,7 @@ public:
 	bool Sendex(const char* format, ...);
 	static void Loop(Client* c);
 	void OnDisconnect();
+	bool isIdentified;
 private:
 	bool send(const char* msg);
 };

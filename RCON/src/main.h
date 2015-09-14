@@ -28,6 +28,7 @@
 #include <iostream>
 #include <string>
 #include <squirrel.h>
+#include <SQImports.h>
 #include <VCMP.h>
 #include "RCON.h"
 
@@ -40,10 +41,16 @@
 extern PluginFuncs* VCMP_PF;
 extern RCON* rcon;
 
+extern HSQUIRRELVM sqvm;
+extern HSQAPI sqapi;
+
 extern "C"
 {
 	EXPORT unsigned int VcmpPluginInit(PluginFuncs* pluginFuncs, PluginCallbacks* pluginCalls, PluginInfo* pluginInfo);
-	void OnShutdown();
 }
+
+int OnInternalCommand(unsigned int uCmdType, const char* pszText);
+void OnShutdown();
+void OnSquirrelScriptLoad();
 
 #endif

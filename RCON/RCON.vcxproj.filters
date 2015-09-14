@@ -57,6 +57,12 @@
     <ClInclude Include="src\RCON.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\SQImports.h">
+      <Filter>Header Files\Squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SQModule.h">
+      <Filter>Header Files\Squirrel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Client.cpp">
@@ -68,10 +74,5 @@
     <ClCompile Include="src\RCON.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="exports.def">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
