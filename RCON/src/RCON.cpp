@@ -191,17 +191,70 @@ void RCON::OnRecv(Client* c, std::string msg)
 		if (!c->isIdentified)
 		{
 			c->Send("Error: You are not authorized to execute this command!");
+			VCMP_PF->printf("[RCON]: Client (IP: %s) has attempted to execute \"%s\" before identifying.", ipaddr(c).c_str(), msg.c_str());
 			return;
 		}
 
 		ISCMD(help)
 		{
-
+			// Available commands will be listed in here
+		}
+		ISCMD(kick)
+		{
+			if (params.size() < 1)
+			{
+				c->Send("Syntax: kick [player ID] [optional:reason]");
+				return;
+			}
+			int id = std::stoi(params[0]);
+			if (id < 0)
+			{
+				c->Send("Error: Invalid playerid.");
+				return;
+			}
+			if (!VCMP_PF->IsPlayerConnected(id))
+			{
+				c->Send("Error: This player is not connected.");
+				return;
+			}
+			std::string reason = "No Reason";
+			if (params.size() >= 2)
+			{
+				reason.clear();
+				for (int i = 1; i < params.size(); i++)
+				{
+					reason += params[i];
+					if (i != params.size() - 1)
+						reason += " ";
+				}
+			}
+			std::string name, ip;
+			char* tmpBuff = new char[512];
+			tmpBuff[0] = 0;
+			VCMP_PF->GetPlayerName(id, tmpBuff, 512);
+			name = std::string(tmpBuff);
+			VCMP_PF->GetPlayerIP(id, tmpBuff, 512);
+			ip = std::string(tmpBuff);
+			//strcpy(tmpBuff, 0);
+			delete tmpBuff;
+			
+			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("You are kicked from this server by RCON admin.").c_str());
+			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Reason: " + reason).c_str());
+			for (unsigned i = 0; i < VCMP_PF->GetMaxPlayers(); i++) {
+				if (VCMP_PF->IsPlayerConnected(i))
+				{
+					VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Player " + name + "[" + params[0] + "] has been kicked by RCON admin.").c_str());
+					VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Reason: " + reason).c_str());
+				}
+			}
+			c->Send("Successfully kicked " + name + "[" + params[0] + "]{" + ip + "} from the server.");
+			VCMP_PF->printf("[RCON]: Client (IP: %s) has kicked %s[%i]{%s} from the server.", ipaddr(c).c_str(), name.c_str(), id, ip.c_str());
+			VCMP_PF->KickPlayer(id);
 		}
 		else
 		{
 			if (&sqvm == nullptr) return;
-			// Send it to squirrel scripts, can be custom commands. Who knows?
+			// Send it to squirrel scripts, can be custom command. Who knows?
 			int top = sqapi->gettop(sqvm);
 			sqapi->pushroottable(sqvm);
 			sqapi->pushstring(sqvm, (const SQChar*)"RCON_OnCommand", -1); // RCON_OnCommand(ip, command, params)
