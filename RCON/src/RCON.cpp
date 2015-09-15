@@ -200,7 +200,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			// Available commands will be listed in here
 		}
-		ISCMD(kick)
+		else ISCMD(kick)
 		{
 			if (params.size() < 1)
 			{
@@ -252,7 +252,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			VCMP_PF->KickPlayer(id);
 			return;
 		}
-		ISCMD(ban)
+		else ISCMD(ban)
 		{
 			if (params.size() < 1)
 			{
@@ -304,7 +304,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			VCMP_PF->BanPlayer(id);
 			return;
 		}
-		ISCMD(banip)
+		else ISCMD(banip)
 		{
 			if (params.size() != 1)
 			{
@@ -323,7 +323,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			VCMP_PF->BanIP((char*) params[0].c_str());
 			return;
 		}
-		ISCMD(unbanip)
+		else ISCMD(unbanip)
 		{
 			if (params.size() != 1)
 			{
@@ -340,6 +340,31 @@ void RCON::OnRecv(Client* c, std::string msg)
 			c->Send("Successfully unbanned {" + params[0] + "} from the server.");
 			VCMP_PF->printf("[RCON]: Client (IP: %s) has unbanned {%s} from the server.", ipaddr(c).c_str(), params[0].c_str());
 			VCMP_PF->UnbanIP((char*)params[0].c_str());
+			return;
+		}
+		else ISCMD(players)
+		{
+			if (VCMP_PF->GetMaxPlayers() > 0)
+				c->Send("ID\tName\tIP\tPing");
+			for (int i = 0; i < VCMP_PF->GetMaxPlayers(); i++)
+			{
+				if (!VCMP_PF->IsPlayerConnected(i))
+					continue;
+				std::string name, ip;
+				int ping;
+				char* tmpBuff = new char[1024];
+				tmpBuff[0] = 0;
+				VCMP_PF->GetPlayerName(i, tmpBuff, 512);
+				name = std::string(tmpBuff);
+				VCMP_PF->GetPlayerIP(i, tmpBuff, 512);
+				ip = std::string(tmpBuff);
+				ping = VCMP_PF->GetPlayerPing(i);
+				
+				tmpBuff[0] = 0;
+				sprintf(tmpBuff, "#%i\t%s\t%s\t%i", i, name.c_str(), ip.c_str(), ping);
+				c->Send(std::string(tmpBuff));
+				delete tmpBuff;
+			}
 			return;
 		}
 		else
