@@ -146,7 +146,7 @@ void RCON::Loop(RCON* r)
 			//continue;
 			break;
 		}
-		Client* nc = new Client(r->sockid, cid, &csa);
+		Client* nc = new Client(r->sockid, cid, csa);
 		nc->_rcon = r;
 		r->clients.push_back(nc);
 	}

@@ -31,7 +31,7 @@ public:
 	sockaddr_in* clientsock;
 	RCON* _rcon;
 	bool isConnected;
-	Client(SOCKET s, SOCKET c, sockaddr_in* cs);
+	Client(SOCKET s, SOCKET c, sockaddr_in cs);
 	~Client();
 	bool Send(std::string msg);
 	bool Sendex(const char* format, ...);

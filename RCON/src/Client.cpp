@@ -18,11 +18,12 @@
 #include "RCON.h"
 #include "Client.h"
 
-Client::Client(SOCKET s, SOCKET c, sockaddr_in* cs)
+Client::Client(SOCKET s, SOCKET c, sockaddr_in cs)
 {
 	ssock = s;
 	csock = c;
-	clientsock = cs;
+	clientsock = new sockaddr_in();
+	*clientsock = cs;
 	this->isConnected = true;
 	this->sockthread = new std::thread(Client::Loop, this);
 	this->sockthread->detach();
