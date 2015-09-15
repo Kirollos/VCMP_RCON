@@ -238,7 +238,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			ip = std::string(tmpBuff);
 			delete tmpBuff;
 			
-			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("You are kicked from this server by RCON admin.").c_str());
+			VCMP_PF->SendClientMessage(id, 0xFF0000FF, "You are kicked from this server by RCON admin.");
 			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Reason: " + reason).c_str());
 			for (unsigned int i = 0; i < (unsigned int)VCMP_PF->GetMaxPlayers(); i++) {
 				if (VCMP_PF->IsPlayerConnected(i))
@@ -290,7 +290,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			ip = std::string(tmpBuff);
 			delete tmpBuff;
 
-			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("You are banned from this server by RCON admin.").c_str());
+			VCMP_PF->SendClientMessage(id, 0xFF0000FF, "You are banned from this server by RCON admin.");
 			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Reason: " + reason).c_str());
 			for (unsigned int i = 0; i < (unsigned int)VCMP_PF->GetMaxPlayers(); i++) {
 				if (VCMP_PF->IsPlayerConnected(i))
