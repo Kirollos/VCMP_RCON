@@ -222,7 +222,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			if (params.size() >= 2)
 			{
 				reason.clear();
-				for (int i = 1; i < params.size(); i++)
+				for (int i = 1; i < (int)params.size(); i++)
 				{
 					reason += params[i];
 					if (i != params.size() - 1)
@@ -236,12 +236,11 @@ void RCON::OnRecv(Client* c, std::string msg)
 			name = std::string(tmpBuff);
 			VCMP_PF->GetPlayerIP(id, tmpBuff, 512);
 			ip = std::string(tmpBuff);
-			//strcpy(tmpBuff, 0);
 			delete tmpBuff;
 			
 			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("You are kicked from this server by RCON admin.").c_str());
 			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Reason: " + reason).c_str());
-			for (unsigned i = 0; i < VCMP_PF->GetMaxPlayers(); i++) {
+			for (unsigned int i = 0; i < (unsigned int)VCMP_PF->GetMaxPlayers(); i++) {
 				if (VCMP_PF->IsPlayerConnected(i))
 				{
 					VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Player " + name + "[" + params[0] + "] has been kicked by RCON admin.").c_str());
@@ -251,6 +250,97 @@ void RCON::OnRecv(Client* c, std::string msg)
 			c->Send("Successfully kicked " + name + "[" + params[0] + "]{" + ip + "} from the server.");
 			VCMP_PF->printf("[RCON]: Client (IP: %s) has kicked %s[%i]{%s} from the server.", ipaddr(c).c_str(), name.c_str(), id, ip.c_str());
 			VCMP_PF->KickPlayer(id);
+			return;
+		}
+		ISCMD(ban)
+		{
+			if (params.size() < 1)
+			{
+				c->Send("Syntax: ban [player ID] [optional:reason]");
+				return;
+			}
+			int id = std::stoi(params[0]);
+			if (id < 0)
+			{
+				c->Send("Error: Invalid playerid.");
+				return;
+			}
+			if (!VCMP_PF->IsPlayerConnected(id))
+			{
+				c->Send("Error: This player is not connected.");
+				return;
+			}
+			std::string reason = "No Reason";
+			if (params.size() >= 2)
+			{
+				reason.clear();
+				for (int i = 1; i < (int)params.size(); i++)
+				{
+					reason += params[i];
+					if (i != params.size() - 1)
+						reason += " ";
+				}
+			}
+			std::string name, ip;
+			char* tmpBuff = new char[512];
+			tmpBuff[0] = 0;
+			VCMP_PF->GetPlayerName(id, tmpBuff, 512);
+			name = std::string(tmpBuff);
+			VCMP_PF->GetPlayerIP(id, tmpBuff, 512);
+			ip = std::string(tmpBuff);
+			delete tmpBuff;
+
+			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("You are banned from this server by RCON admin.").c_str());
+			VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Reason: " + reason).c_str());
+			for (unsigned int i = 0; i < (unsigned int)VCMP_PF->GetMaxPlayers(); i++) {
+				if (VCMP_PF->IsPlayerConnected(i))
+				{
+					VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Player " + name + "[" + params[0] + "] has been banned by RCON admin.").c_str());
+					VCMP_PF->SendClientMessage(id, 0xFF0000FF, std::string("Reason: " + reason).c_str());
+				}
+			}
+			c->Send("Successfully banned " + name + "[" + params[0] + "]{" + ip + "} from the server.");
+			VCMP_PF->printf("[RCON]: Client (IP: %s) has banned %s[%i]{%s} from the server.", ipaddr(c).c_str(), name.c_str(), id, ip.c_str());
+			VCMP_PF->BanPlayer(id);
+			return;
+		}
+		ISCMD(banip)
+		{
+			if (params.size() != 1)
+			{
+				c->Send("Syntax: banip [IPv4]");
+				return;
+			}
+
+			if (VCMP_PF->IsIPBanned((char*)params[0].c_str()))
+			{
+				c->Send("Error: IP {"+params[0]+"} is already banned!");
+				return;
+			}
+
+			c->Send("Successfully IPbanned {"+params[0]+"} from the server.");
+			VCMP_PF->printf("[RCON]: Client (IP: %s) has IPBanned {%s} from the server.", ipaddr(c).c_str(), params[0].c_str());
+			VCMP_PF->BanIP((char*) params[0].c_str());
+			return;
+		}
+		ISCMD(unbanip)
+		{
+			if (params.size() != 1)
+			{
+				c->Send("Syntax: unbanip [IPv4]");
+				return;
+			}
+
+			if (!VCMP_PF->IsIPBanned((char*)params[0].c_str()))
+			{
+				c->Send("Error: IP {" + params[0] + "} is not banned!");
+				return;
+			}
+
+			c->Send("Successfully unbanned {" + params[0] + "} from the server.");
+			VCMP_PF->printf("[RCON]: Client (IP: %s) has unbanned {%s} from the server.", ipaddr(c).c_str(), params[0].c_str());
+			VCMP_PF->UnbanIP((char*)params[0].c_str());
+			return;
 		}
 		else
 		{
