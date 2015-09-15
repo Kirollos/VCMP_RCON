@@ -56,12 +56,13 @@ class RCON
 	WSAData _WSADATA;
 #endif
 public:
-	RCON(short port, std::string bindip = "0.0.0.0");
+	RCON(short port, std::string bindip, std::string password);
 	~RCON();
 	std::vector<Client*> clients;
 	std::thread* sockthread;
 	SOCKET sockid;
 	bool isHosted;
+	std::string password;
 	static void Loop(RCON* r);
 	bool send(int id, std::string msg);
 	bool send(Client* c, std::string msg);

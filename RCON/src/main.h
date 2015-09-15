@@ -27,6 +27,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <map>
 #include <squirrel.h>
 #include <SQImports.h>
 #include <VCMP.h>
@@ -52,5 +54,13 @@ extern "C"
 int OnInternalCommand(unsigned int uCmdType, const char* pszText);
 void OnShutdown();
 void OnSquirrelScriptLoad();
+
+namespace ConfigUtils
+{
+	std::string GetConfigValue(std::string name);
+	void AppendConfig(std::string name, std::string value);
+	bool GetBool(std::string value);
+	int GetInt(std::string value);
+};
 
 #endif

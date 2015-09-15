@@ -22,7 +22,7 @@
 #include <iterator>
 #include <vector>
 
-RCON::RCON(short port, std::string bindip)
+RCON::RCON(short port, std::string bindip, std::string password)
 {
 #ifdef _WIN32
 	if (WSAStartup(MAKEWORD(2, 0), &_WSADATA) != 0) {
@@ -44,6 +44,7 @@ RCON::RCON(short port, std::string bindip)
 	this->slisten();
 
 	isHosted = true;
+	this->password = password;
 	this->sockthread = new std::thread(RCON::Loop, this);
 	this->sockthread->detach();
 }
@@ -170,7 +171,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (!c->isIdentified)
 			{
-				if (params[0] == "tmppass")
+				if (params[0] == c->_rcon->password)
 				{
 					c->Send("Successfully identified!");
 					c->isIdentified = true;
