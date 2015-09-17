@@ -51,7 +51,7 @@ RCON::RCON(short port, std::string bindip, std::string password)
 
 RCON::~RCON()
 {
-	for (std::vector<Client*>::iterator it = this->clients.begin(); it != this->clients.end(); it++)
+	/*for (std::vector<Client*>::iterator it = this->clients.begin(); it != this->clients.end(); it++)
 	{
 		Client* c = *it;
 		if (c != nullptr && c->isConnected)
@@ -60,7 +60,16 @@ RCON::~RCON()
 			Sleep(100);
 			delete c;
 		}
+	}*/
+	this->Broadcast("**** Server shutting down!");
+	Sleep(250);
+
+	for (auto it = clients.end(); it != clients.begin(); --it)
+	{
+		if(it != clients.end())
+			this->DisconnectClient(*it);
 	}
+
 	Sleep(750);
 #ifdef _WIN32
 	closesocket(this->sockid);
@@ -127,6 +136,19 @@ bool RCON::sendex(Client* c, const char* format, ...)
 	return retval;
 }
 
+void RCON::DisconnectClient(Client* c)
+{
+	for (std::vector<Client*>::iterator it = this->clients.begin(); it != this->clients.end(); it++)
+	{
+		if (*it == c)
+		{
+			this->clients.erase(it);
+			break;
+		}
+	}
+	c->Disconnect();
+}
+
 int RCON::Broadcast(std::string message)
 {
 	int count = 0;
@@ -161,13 +183,13 @@ void RCON::Loop(RCON* r)
 {
 	while (r->isHosted)
 	{
-		for (std::vector<Client*>::iterator it = r->clients.begin(); it != r->clients.end(); it++)
+		/*for (std::vector<Client*>::iterator it = r->clients.begin(); it != r->clients.end(); it++)
 		{
 			if (*it != nullptr && !(*it)->isConnected)
 			{
 				r->clients.erase(it);
 			}
-		}
+		}*/
 		sockaddr_in csa;
 		int csa_len = sizeof(csa);
 		SOCKET cid = accept(r->sockid, (sockaddr*) &csa, &csa_len);
@@ -227,6 +249,14 @@ void RCON::OnRecv(Client* c, std::string msg)
 		ISCMD(help)
 		{
 			// Available commands will be listed in here
+			c->Send("Command\t\tDescription");
+			int i;
+			for (i = 0; i < sizeof(commands) / sizeof(commands[0]); i++)
+			{
+				c->Sendex("%s\t\t%s", commands[i][0].c_str(), commands[i][1].c_str());
+			}
+			c->Send("===================================");
+			c->Sendex("Current available RCON commands: %i", i);
 		}
 		else ISCMD(exit)
 		{
@@ -378,7 +408,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 		else ISCMD(players)
 		{
 			if (VCMP_PF->GetMaxPlayers() > 0)
-				c->Send("ID\tName\tIP\tPing");
+				c->Send("ID\tName\tIP\tPing\tScore");
 			else
 				c->Send("No players connected.");
 			for (int i = 0; i < VCMP_PF->GetMaxPlayers(); i++)
@@ -386,7 +416,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 				if (!VCMP_PF->IsPlayerConnected(i))
 					continue;
 				std::string name, ip;
-				int ping;
+				int ping, score;
 				char* tmpBuff = new char[1024];
 				tmpBuff[0] = 0;
 				VCMP_PF->GetPlayerName(i, tmpBuff, 512);
@@ -394,9 +424,10 @@ void RCON::OnRecv(Client* c, std::string msg)
 				VCMP_PF->GetPlayerIP(i, tmpBuff, 512);
 				ip = std::string(tmpBuff);
 				ping = VCMP_PF->GetPlayerPing(i);
+				score = VCMP_PF->GetPlayerScore(i);
 				delete tmpBuff;
 
-				c->Sendex("#%i\t%s\t%s\t%i", i, name.c_str(), ip.c_str(), ping);
+				c->Sendex("#%i\t%s\t%s\t%i\t%i", i, name.c_str(), ip.c_str(), ping, score);
 			}
 			return;
 		}

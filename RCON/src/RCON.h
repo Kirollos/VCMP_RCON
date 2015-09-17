@@ -68,10 +68,23 @@ public:
 	bool send(Client* c, std::string msg);
 	bool sendex(int id, const char* format, ...);
 	bool sendex(Client* c, const char* format, ...);
+	void DisconnectClient(Client* c);
 	int Broadcast(std::string message);
 	int Broadcastex(const char* format, ...);
 	static void OnRecv(Client* c, std::string msg);
 	void OnClientDisconnect(Client* c);
+};
+
+const std::string commands[][2] =
+{
+	{"help", "Shows the available list of commands"},
+	{"exit", "Disconnects your current RCON session"},
+	{"kick", "Kicks a player from the server"},
+	{"ban", "Bans a player from the server"},
+	{"banip", "Bans the given IP from the server"},
+	{"unbanip", "Unbans the given IP from the server"},
+	{"players", "Lists the connected players with basic info"},
+	{"listclients", "Lists the connected RCON clients"}
 };
 
 #endif

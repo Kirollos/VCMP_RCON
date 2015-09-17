@@ -46,14 +46,6 @@ Client::~Client()
 	}
 	if (this->sockthread->joinable())
 		this->sockthread->join();
-	for (std::vector<Client*>::iterator it = rcon->clients.begin(); it != rcon->clients.end(); it++)
-	{
-		if (*it == this)
-		{
-			rcon->clients.erase(it);
-			break;
-		}
-	}
 }
 
 bool Client::Send(std::string msg)
@@ -143,5 +135,4 @@ void Client::Loop(Client* c)
 void Client::OnDisconnect()
 {
 	this->_rcon->OnClientDisconnect(this);
-	delete this;
 }
