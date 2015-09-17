@@ -33,6 +33,7 @@ namespace Events
 		pName[0] = 0;
 		VCMP_PF->GetPlayerName(playerid, pName, 100);
 		rcon->Broadcastex("[CONNECT] %s[%i] has connected!", pName, playerid);
+		delete pName;
 	}
 
 	void OnPlayerDisconnect(int playerid, int nReason)
@@ -41,6 +42,7 @@ namespace Events
 		pName[0] = 0;
 		VCMP_PF->GetPlayerName(playerid, pName, 100);
 		rcon->Broadcastex("[DISCONNECT:%i] %s[%i] has disconnected!", nReason, pName, playerid);
+		delete pName;
 	}
 
 	void OnPlayerSpawn(int playerid)
@@ -49,6 +51,7 @@ namespace Events
 		pName[0] = 0;
 		VCMP_PF->GetPlayerName(playerid, pName, 100);
 		rcon->Broadcastex("[SPAWN] %s[%i] has spawned!", pName, playerid);
+		delete pName;
 	}
 
 	void OnPlayerDeath(int playerid, int killerid, int reason, int bodypart)

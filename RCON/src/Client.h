@@ -35,6 +35,7 @@ public:
 	~Client();
 	bool Send(std::string msg);
 	bool Sendex(const char* format, ...);
+	bool Disconnect();
 	static void Loop(Client* c);
 	void OnDisconnect();
 	bool isIdentified;

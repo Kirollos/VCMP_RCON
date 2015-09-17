@@ -231,7 +231,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 		else ISCMD(exit)
 		{
 			c->Send("Good bye!");
-			delete c;
+			c->Disconnect();
 		}
 		else ISCMD(kick)
 		{

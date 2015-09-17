@@ -93,6 +93,12 @@ bool Client::Sendex(const char* format, ...)
 	return retval;
 }
 
+bool Client::Disconnect()
+{
+	isConnected = false;
+	return shutdown(this->csock, SD_BOTH) == 0;
+}
+
 void Client::Loop(Client* c)
 {
 	if (!c->isConnected) return;
