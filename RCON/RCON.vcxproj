@@ -162,11 +162,13 @@
     <ClInclude Include="inc\sqstdsystem.h" />
     <ClInclude Include="inc\squirrel.h" />
     <ClInclude Include="inc\VCMP.h" />
+    <ClInclude Include="src\events.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\RCON.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Client.cpp" />
+    <ClCompile Include="src\events.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\RCON.cpp" />
   </ItemGroup>

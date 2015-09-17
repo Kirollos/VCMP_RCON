@@ -66,8 +66,10 @@ public:
 	static void Loop(RCON* r);
 	bool send(int id, std::string msg);
 	bool send(Client* c, std::string msg);
-	bool sendex(int id, const char* format);
-	bool sendex(Client* c, const char* format);
+	bool sendex(int id, const char* format, ...);
+	bool sendex(Client* c, const char* format, ...);
+	int Broadcast(std::string message);
+	int Broadcastex(const char* format, ...);
 	static void OnRecv(Client* c, std::string msg);
 	void OnClientDisconnect(Client* c);
 };

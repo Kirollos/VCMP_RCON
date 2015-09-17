@@ -17,6 +17,7 @@
 #include "main.h"
 #include "RCON.h"
 #include "Client.h"
+#include "events.h"
 
 PluginFuncs* VCMP_PF = nullptr;
 RCON* rcon = nullptr;
@@ -75,6 +76,7 @@ extern "C"
 		pluginCalls->OnShutdownServer = OnShutdown;
 		pluginCalls->OnInternalCommand = OnInternalCommand;
 		rcon = new RCON(ConfigUtils::GetInt(port), bindip, password);
+		Events::RegisterEvents(pluginCalls);
 		return 1;
 	}
 }

@@ -18,8 +18,9 @@
 #include "RCON.h"
 #include "Client.h"
 
-Client::Client(SOCKET s, SOCKET c, sockaddr_in cs)
+Client::Client(SOCKET s, SOCKET c, sockaddr_in cs, RCON* r)
 {
+	this->_rcon = r;
 	ssock = s;
 	csock = c;
 	clientsock = new sockaddr_in();
@@ -33,15 +34,26 @@ Client::Client(SOCKET s, SOCKET c, sockaddr_in cs)
 
 Client::~Client()
 {
-	this->isConnected = false;
-	Sleep(100);
+	if (this->isConnected)
+	{
+		this->isConnected = false;
+		Sleep(250);
 #ifdef _WIN32
-	closesocket(this->csock);
+		closesocket(this->csock);
 #else
-	close(this->csock);
+		close(this->csock);
 #endif
+	}
 	if (this->sockthread->joinable())
 		this->sockthread->join();
+	for (std::vector<Client*>::iterator it = rcon->clients.begin(); it != rcon->clients.end(); it++)
+	{
+		if (*it == this)
+		{
+			rcon->clients.erase(it);
+			break;
+		}
+	}
 }
 
 bool Client::Send(std::string msg)
@@ -112,24 +124,18 @@ void Client::Loop(Client* c)
 		_data.clear();
 		continue;
 	}
+	c->isConnected = false;
 	c->OnDisconnect();
 #ifdef _WIN32
 	closesocket(c->csock);
 #else
 	close(c->csock);
 #endif
-	for (std::vector<Client*>::iterator it = rcon->clients.begin(); it != rcon->clients.end(); it++)
-	{
-		if (*it == c)
-		{
-			rcon->clients.erase(it);
-			break;
-		}
-	}
 	return;
 }
 
 void Client::OnDisconnect()
 {
 	this->_rcon->OnClientDisconnect(this);
+	delete this;
 }

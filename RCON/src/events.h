@@ -16,32 +16,18 @@
 
 #pragma once
 
-#ifndef __RCLIENT_H
-#define __RCLIENT_H
+#ifndef __REVENTS_H
+#define __REVENTS_H
 
 #include "main.h"
-class RCON;
 
-class Client
+namespace Events
 {
-	SOCKET ssock;
-	SOCKET csock;
-	std::thread* sockthread;
-public:
-	sockaddr_in* clientsock;
-	RCON* _rcon;
-	bool isConnected;
-	Client(SOCKET s, SOCKET c, sockaddr_in cs, RCON* r);
-	~Client();
-	bool Send(std::string msg);
-	bool Sendex(const char* format, ...);
-	static void Loop(Client* c);
-	void OnDisconnect();
-	bool isIdentified;
-private:
-	bool send(const char* msg);
-};
-
-#define ipaddr(c) std::string(inet_ntoa(c->clientsock->sin_addr))
+	void RegisterEvents(PluginCallbacks* vccb);
+	void OnPlayerConnect(int playerid);
+	void OnPlayerDisconnect(int playerid, int nReason);
+	void OnPlayerSpawn(int playerid);
+	void OnPlayerDeath(int playerid, int killerid, int reason, int bodypart);
+}
 
 #endif

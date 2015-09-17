@@ -97,7 +97,7 @@ bool RCON::send(Client* c, std::string msg)
 	return c->Send(msg);
 }
 
-bool RCON::sendex(int id, const char* format)
+bool RCON::sendex(int id, const char* format, ...)
 {
 	va_list args;
 	va_start(args, format);
@@ -112,7 +112,7 @@ bool RCON::sendex(int id, const char* format)
 	return retval;
 }
 
-bool RCON::sendex(Client* c, const char* format)
+bool RCON::sendex(Client* c, const char* format, ...)
 {
 	va_list args;
 	va_start(args, format);
@@ -121,6 +121,36 @@ bool RCON::sendex(Client* c, const char* format)
 	vsprintf(formatted, format, args);
 
 	bool retval = c->Send(std::string(formatted));
+
+	va_end(args);
+	delete formatted;
+	return retval;
+}
+
+int RCON::Broadcast(std::string message)
+{
+	int count = 0;
+	for (std::vector<Client*>::iterator it = this->clients.begin(); it != this->clients.end(); it++)
+	{
+		Client* c = *it;
+		if (c->isConnected)
+		{
+			if (c->Send(message))
+				count++;
+		}
+	}
+	return count;
+}
+
+int RCON::Broadcastex(const char* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+
+	char* formatted = new char[1024];
+	vsprintf(formatted, format, args);
+
+	int retval = this->Broadcast(std::string(formatted));
 
 	va_end(args);
 	delete formatted;
@@ -147,9 +177,7 @@ void RCON::Loop(RCON* r)
 			//continue;
 			break;
 		}
-		Client* nc = new Client(r->sockid, cid, csa);
-		nc->_rcon = r;
-		r->clients.push_back(nc);
+		r->clients.push_back(new Client(r->sockid, cid, csa, r));
 	}
 	return;
 }
@@ -199,6 +227,11 @@ void RCON::OnRecv(Client* c, std::string msg)
 		ISCMD(help)
 		{
 			// Available commands will be listed in here
+		}
+		else ISCMD(exit)
+		{
+			c->Send("Good bye!");
+			delete c;
 		}
 		else ISCMD(kick)
 		{
@@ -346,6 +379,8 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (VCMP_PF->GetMaxPlayers() > 0)
 				c->Send("ID\tName\tIP\tPing");
+			else
+				c->Send("No players connected.");
 			for (int i = 0; i < VCMP_PF->GetMaxPlayers(); i++)
 			{
 				if (!VCMP_PF->IsPlayerConnected(i))
@@ -359,11 +394,23 @@ void RCON::OnRecv(Client* c, std::string msg)
 				VCMP_PF->GetPlayerIP(i, tmpBuff, 512);
 				ip = std::string(tmpBuff);
 				ping = VCMP_PF->GetPlayerPing(i);
-				
-				tmpBuff[0] = 0;
-				sprintf(tmpBuff, "#%i\t%s\t%s\t%i", i, name.c_str(), ip.c_str(), ping);
-				c->Send(std::string(tmpBuff));
 				delete tmpBuff;
+
+				c->Sendex("#%i\t%s\t%s\t%i", i, name.c_str(), ip.c_str(), ping);
+			}
+			return;
+		}
+		else ISCMD(listclients)
+		{
+			RCON* r = c->_rcon;
+			c->Send("ID\tIP");
+			for (int i = 0; i < r->clients.size(); i++)
+			{
+				Client* _c = r->clients[i];
+				if (_c != nullptr && _c->isConnected)
+				{
+					c->Sendex("#%i\t%s", i, ipaddr(_c).c_str());
+				}
 			}
 			return;
 		}

@@ -63,6 +63,9 @@
     <ClInclude Include="inc\SQModule.h">
       <Filter>Header Files\Squirrel</Filter>
     </ClInclude>
+    <ClInclude Include="src\events.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Client.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\RCON.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\events.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
