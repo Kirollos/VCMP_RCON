@@ -64,7 +64,10 @@ extern "C"
 		}
 
 		if (!ConfigUtils::GetBool(enabled))
+		{
+			VCMP_PF->printf("[RCON]: Plugin is disabled.");
 			return 1;
+		}
 
 		if (ConfigUtils::GetInt(port) == 0)
 			port = "1337";
@@ -75,8 +78,16 @@ extern "C"
 		
 		pluginCalls->OnShutdownServer = OnShutdown;
 		pluginCalls->OnInternalCommand = OnInternalCommand;
-		rcon = new RCON(ConfigUtils::GetInt(port), bindip, password);
+		try {
+			rcon = new RCON(ConfigUtils::GetInt(port), bindip, password);
+		}
+		catch (std::exception& e)
+		{
+			VCMP_PF->printf("[RCON]: Failed to initialize the plugin, given error: %s", e.what());
+			return 0;
+		}
 		Events::RegisterEvents(pluginCalls);
+		VCMP_PF->printf("[RCON]: Plugin is enabled.");
 		return 1;
 	}
 }
@@ -133,6 +144,8 @@ namespace ConfigUtils {
 				line.erase(line.find_last_of("\r"));
 			if (line.find_last_of("\n") != std::string::npos)
 				line.erase(line.find_last_of("\n"));
+			if (line.empty())
+				continue;
 			std::string _name;
 			std::string _value;
 			_name = line.substr(0, line.find_first_of(' '));
