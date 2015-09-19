@@ -63,4 +63,22 @@ namespace ConfigUtils
 	int GetInt(std::string value);
 };
 
+#ifdef _WIN32
+typedef int socklen_t;
+#endif
+
+// For exceptions
+struct exp : std::exception
+{
+	char* excepstr;
+	const char* what() const noexcept { return excepstr; }
+};
+
+#define THROWEXP(exceptionstring) \
+{ \
+struct exp _exp; \
+_exp.excepstr = new char[strlen(exceptionstring)+1]; \
+throw _exp; \
+}
+
 #endif

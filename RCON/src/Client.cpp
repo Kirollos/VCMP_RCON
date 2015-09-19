@@ -53,7 +53,7 @@ bool Client::Send(std::string msg)
 	if (!msg.empty()) {
 		if (msg.find("\n") == std::string::npos && msg.find("\r\n") == std::string::npos)
 		{
-			msg.append(RN);
+			msg.append("\r\n"); // Some clients do not like \n alone
 		}
 		//return sendto(this->csock, msg.c_str(), msg.length(), 0, this->clientsock, sizeof(this->clientsock)) != -1;
 	}
@@ -103,7 +103,7 @@ void Client::Loop(Client* c)
 		{
 			recvsize = 0;
 			char r = NULL;
-			int clientsock_len = sizeof(c->clientsock);
+			socklen_t clientsock_len = sizeof(c->clientsock);
 			if ((recvsize = recvfrom(c->csock, &r, 1, 0, (sockaddr*) c->clientsock, &clientsock_len)) > 0)
 			{
 				_data += r;

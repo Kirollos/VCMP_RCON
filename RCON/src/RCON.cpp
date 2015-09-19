@@ -35,12 +35,14 @@ RCON::RCON(short port, std::string bindip, std::string password)
 #ifdef _WIN32
 		WSACleanup();
 #endif
-		throw new std::exception("Failed to initialize socket");
+		THROWEXP("Failed to initialize socket")
 	}
 	this->_port = port;
 	this->_bindip = bindip;
 	if (!this->sbind())
-		throw new std::exception("Failed to bind to given ip/port");
+	{
+		THROWEXP("Failed to bind to given ip/port")
+	}
 	this->slisten();
 
 	isHosted = true;
@@ -191,7 +193,7 @@ void RCON::Loop(RCON* r)
 			}
 		}*/
 		sockaddr_in csa;
-		int csa_len = sizeof(csa);
+		socklen_t csa_len = sizeof(csa);
 		SOCKET cid = accept(r->sockid, (sockaddr*) &csa, &csa_len);
 		if (cid == -1)
 		{
