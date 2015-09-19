@@ -226,11 +226,13 @@ void RCON::OnRecv(Client* c, std::string msg)
 				if (params[0] == c->_rcon->password)
 				{
 					c->Send("Successfully identified!");
+					VCMP_PF->printf("[RCON]: Client (IP: %s) has successfully logged in!", ipaddr(c).c_str());
 					c->isIdentified = true;
 				}
 				else
 				{
 					c->Send("Error: Incorrect password!");
+					VCMP_PF->printf("[RCON]: Client (IP: %s) has failed to logged in. Password: %s", ipaddr(c).c_str(), params[0].c_str());
 				}
 			}
 			else
@@ -238,6 +240,15 @@ void RCON::OnRecv(Client* c, std::string msg)
 				c->Send("Error: You are already identified!");
 			}
 		}
+		else
+		{
+			c->Send("Syntax: login <password>");
+		}
+	}
+	else ISCMD(exit)
+	{
+		c->Send("Good bye!");
+		c->Disconnect();
 	}
 	else
 	{
@@ -247,6 +258,8 @@ void RCON::OnRecv(Client* c, std::string msg)
 			VCMP_PF->printf("[RCON]: Client (IP: %s) has attempted to execute \"%s\" before identifying.", ipaddr(c).c_str(), msg.c_str());
 			return;
 		}
+
+		VCMP_PF->printf("[RCON]: Client (IP: %s) has executed \"%s\"", ipaddr(c).c_str(), msg.c_str());
 
 		ISCMD(help)
 		{
@@ -259,11 +272,6 @@ void RCON::OnRecv(Client* c, std::string msg)
 			}
 			c->Send("===================================");
 			c->Sendex("Current available RCON commands: %i", i);
-		}
-		else ISCMD(exit)
-		{
-			c->Send("Good bye!");
-			c->Disconnect();
 		}
 		else ISCMD(kick)
 		{
