@@ -25,6 +25,8 @@ namespace Events
 		vccb->OnPlayerDisconnect = Events::OnPlayerDisconnect;
 		vccb->OnPlayerSpawn = Events::OnPlayerSpawn;
 		vccb->OnPlayerDeath = Events::OnPlayerDeath;
+		vccb->OnPublicMessage = Events::OnMessage;
+		vccb->OnCommandMessage = Events::OnCommand;
 	}
 
 	void OnPlayerConnect(int playerid)
@@ -56,6 +58,34 @@ namespace Events
 
 	void OnPlayerDeath(int playerid, int killerid, int reason, int bodypart)
 	{
+		char* pName = new char[100];
+		pName[0] = 0;
+		VCMP_PF->GetPlayerName(playerid, pName, 100);
+		char* kName = new char[100];
+		kName[0] = 0;
+		VCMP_PF->GetPlayerName(killerid, kName, 100);
+		rcon->Broadcastex("[DEATH] %s has died, killer:%s[%i], reason:%i, bodypart:%i", pName, playerid, kName, killerid, reason, bodypart);
+		delete pName;
+		delete kName;
+	}
 
+	int OnMessage(int playerid, const char* message)
+	{
+		char* pName = new char[100];
+		pName[0] = 0;
+		VCMP_PF->GetPlayerName(playerid, pName, 100);
+		rcon->Broadcastex("[CHAT] %s[%i]: %s", pName, playerid, message);
+		delete pName;
+		return 1;
+	}
+
+	int OnCommand(int playerid, const char* message)
+	{
+		char* pName = new char[100];
+		pName[0] = 0;
+		VCMP_PF->GetPlayerName(playerid, pName, 100);
+		rcon->Broadcastex("[COMMAND] %s[%i]: /%s", pName, playerid, message);
+		delete pName;
+		return 1;
 	}
 }

@@ -28,6 +28,8 @@ namespace Events
 	void OnPlayerDisconnect(int playerid, int nReason);
 	void OnPlayerSpawn(int playerid);
 	void OnPlayerDeath(int playerid, int killerid, int reason, int bodypart);
+	int OnMessage(int playerid, const char* message);
+	int OnCommand(int playerid, const char* message);
 }
 
 #endif
