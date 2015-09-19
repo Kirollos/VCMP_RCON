@@ -6,7 +6,7 @@
 //
 
 #pragma once
-#include "main.h"
+//#include "main.h" // Not needed k
 #include "SQModule.h"
 
 typedef HSQAPI * (*Sq_GetSquirrelAPI) (void);
