@@ -29,6 +29,8 @@ Client::Client(SOCKET s, SOCKET c, sockaddr_in cs, RCON* r)
 	this->sockthread = new std::thread(Client::Loop, this);
 	this->sockthread->detach();
 	VCMP_PF->printf("[RCON]: A client has connected! (IP: %s)", ipaddr(this).c_str());
+	this->Send("Welcome. You have to log in with login <password> command.");
+	this->Send("If you do not know the password, I suggest closing this session by typing \"exit\" or disconnecting your client.");
 	this->isIdentified = false;
 }
 
