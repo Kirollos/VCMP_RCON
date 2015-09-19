@@ -78,6 +78,7 @@ struct exp : std::exception
 { \
 struct exp _exp; \
 _exp.excepstr = new char[strlen(exceptionstring)+1]; \
+strcpy(_exp.excepstr, exceptionstring); \
 throw _exp; \
 }
 
