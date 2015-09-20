@@ -280,7 +280,15 @@ void RCON::OnRecv(Client* c, std::string msg)
 				c->Send("Syntax: kick [player ID] [optional:reason]");
 				return;
 			}
-			int id = std::stoi(params[0]);
+			int id;
+			try {
+				id = std::stoi(params[0]);
+			}
+			catch (...)
+			{
+				c->Send("Error: Invalid playerid.");
+				return;
+			}
 			if (id < 0)
 			{
 				c->Send("Error: Invalid playerid.");
@@ -332,7 +340,15 @@ void RCON::OnRecv(Client* c, std::string msg)
 				c->Send("Syntax: ban [player ID] [optional:reason]");
 				return;
 			}
-			int id = std::stoi(params[0]);
+			int id;
+			try {
+				id = std::stoi(params[0]);
+			}
+			catch (...)
+			{
+				c->Send("Error: Invalid playerid.");
+				return;
+			}
 			if (id < 0)
 			{
 				c->Send("Error: Invalid playerid.");
