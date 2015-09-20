@@ -39,6 +39,8 @@ public:
 	static void Loop(Client* c);
 	void OnDisconnect();
 	bool isIdentified;
+	int GetID();
+	static int GetID(Client* c);
 private:
 	bool send(const char* msg);
 };
