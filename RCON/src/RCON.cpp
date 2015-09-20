@@ -157,7 +157,7 @@ int RCON::Broadcast(std::string message)
 	for (std::vector<Client*>::iterator it = this->clients.begin(); it != this->clients.end(); it++)
 	{
 		Client* c = *it;
-		if (c->isConnected)
+		if (c->isConnected && c->isIdentified)
 		{
 			if (c->Send(message))
 				count++;
