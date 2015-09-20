@@ -24,6 +24,7 @@ namespace SquirrelFuncs
 #define REGISTERSQFUNCTION(name) register_global_func(*v, #name, SquirrelFuncs::name)
 		REGISTERSQFUNCTION(RCON_Send);
 		REGISTERSQFUNCTION(RCON_Broadcast);
+		REGISTERSQFUNCTION(RCON_GetClients);
 	}
 
 	SQInteger RCON_Send(HSQUIRRELVM v) // RCON_Send(int clientid, string text);
@@ -52,6 +53,33 @@ namespace SquirrelFuncs
 		SQInteger count = 0;
 		count = rcon->Broadcast(std::string((char*)text));
 		sq_pushinteger(v, count);
+		return 1;
+	}
+
+	SQInteger RCON_GetClients(HSQUIRRELVM v) // RCON_GetClients();
+	{
+		/*
+			Returned array will look like this:
+			[
+			//	[string IP, bool IDENTIFIED]
+
+				["127.0.0.1", true], // first client
+				["192.168.1.2", false], // second client
+				... // etc..
+			]
+		*/
+		sq_newarray(v, 0); // main array
+		
+		for (Client* c : rcon->clients)
+		{
+			// client array
+			sq_newarray(v, 0); // client array
+			sq_pushstring(v, (const SQChar*)ipaddr(c).c_str(), -1); // ip
+			sq_arrayappend(v, -2);
+			sq_pushbool(v, (SQBool)c->isIdentified); // identified
+			sq_arrayappend(v, -2); // append to client array
+			sq_arrayappend(v, -2); // append client array to main array
+		}
 		return 1;
 	}
 }
