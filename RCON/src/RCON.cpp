@@ -264,6 +264,20 @@ void RCON::OnRecv(Client* c, std::string msg)
 		ISCMD(help)
 		{
 			// Available commands will be listed in here
+			if (params.size() == 1) {
+				int i;
+				for (i = 0; i < sizeof(commands) / sizeof(commands[0]); i++)
+					if (std::string(commands[i][0]) == params[0])
+					{
+						break;
+					}
+				c->Send("=====================================");
+				c->Sendex("Command: %s", commands[i][0].c_str());
+				c->Sendex("Description: %s", commands[i][1].c_str());
+				c->Sendex("Parameters: %s", commands[i][2].c_str());
+				c->Send("=====================================");
+				return;
+			}
 			int i;
 			for (i = 0; i < sizeof(commands) / sizeof(commands[0]); i++)
 			{
