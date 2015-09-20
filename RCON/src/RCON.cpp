@@ -659,14 +659,14 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (params.size() == 0)
 			{
-				double gravity = VCMP_PF->GetGravity();
+				float gravity = VCMP_PF->GetGravity();
 				c->Sendex("Gravity: %.3f", gravity);
 			}
 			else
 			{
-				double gravity;
+				float gravity;
 				try {
-					gravity = std::stod(params[0]);
+					gravity = std::stof(params[0]);
 				}
 				catch (...)
 				{
@@ -682,14 +682,14 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (params.size() == 0)
 			{
-				double gamespeed = VCMP_PF->GetGamespeed();
+				float gamespeed = VCMP_PF->GetGamespeed();
 				c->Sendex("Game speed: %.3f", gamespeed);
 			}
 			else
 			{
-				double gamespeed;
+				float gamespeed;
 				try {
-					gamespeed = std::stod(params[0]);
+					gamespeed = std::stof(params[0]);
 				}
 				catch (...)
 				{
@@ -705,14 +705,14 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (params.size() == 0)
 			{
-				double waterlevel = VCMP_PF->GetWaterLevel();
+				float waterlevel = VCMP_PF->GetWaterLevel();
 				c->Sendex("Water level: %.3f", waterlevel);
 			}
 			else
 			{
-				double waterlevel;
+				float waterlevel;
 				try {
-					waterlevel = std::stod(params[0]);
+					waterlevel = std::stof(params[0]);
 				}
 				catch (...)
 				{
@@ -728,14 +728,14 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (params.size() == 0)
 			{
-				double maxheight = VCMP_PF->GetMaxHeight();
+				float maxheight = VCMP_PF->GetMaxHeight();
 				c->Sendex("Max height: %.3f", maxheight);
 			}
 			else
 			{
-				double maxheight;
+				float maxheight;
 				try {
-					maxheight = std::stod(params[0]);
+					maxheight = std::stof(params[0]);
 				}
 				catch (...)
 				{
@@ -774,14 +774,14 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (params.size() == 0)
 			{
-				double vfrheight = VCMP_PF->GetVehiclesForcedRespawnHeight();
+				float vfrheight = VCMP_PF->GetVehiclesForcedRespawnHeight();
 				c->Sendex("Vehicles Forced Respawn Height: %.3f", vfrheight);
 			}
 			else
 			{
-				double vfrheight;
+				float vfrheight;
 				try {
-					vfrheight = std::stod(params[0]);
+					vfrheight = std::stof(params[0]);
 				}
 				catch (...)
 				{
@@ -822,7 +822,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			RCON* r = c->_rcon;
 			c->Send("ID\tIP\tIdentified?");
-			for (int i = 0; i < r->clients.size(); i++)
+			for (int i = 0; i < (int)r->clients.size(); i++)
 			{
 				Client* _c = r->clients[i];
 				if (_c != nullptr && _c->isConnected)
