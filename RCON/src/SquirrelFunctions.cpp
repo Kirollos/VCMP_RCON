@@ -50,13 +50,7 @@ namespace SquirrelFuncs
 
 		sq_getstring(v, 2, &text);
 		SQInteger count = 0;
-		for (auto& c : rcon->clients) {
-			if (c != nullptr)
-			{
-				if (c->Send(std::string((char*)text)))
-					count++;
-			}
-		}
+		count = rcon->Broadcast(std::string((char*)text));
 		sq_pushinteger(v, count);
 		return 1;
 	}
