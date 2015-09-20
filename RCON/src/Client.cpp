@@ -141,7 +141,7 @@ void Client::OnDisconnect()
 
 int Client::GetID()
 {
-	for (int i = 0; i < this->_rcon->clients.size(); i++)
+	for (int i = 0; i < (int)this->_rcon->clients.size(); i++)
 	{
 		if (this->_rcon->clients[i] == this)
 			return i;
@@ -151,7 +151,7 @@ int Client::GetID()
 
 int Client::GetID(Client* c)
 {
-	for (int i = 0; i < c->_rcon->clients.size(); i++)
+	for (int i = 0; i < (int)c->_rcon->clients.size(); i++)
 	{
 		if (c->_rcon->clients[i] == c)
 			return i;
