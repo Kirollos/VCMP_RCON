@@ -460,13 +460,13 @@ void RCON::OnRecv(Client* c, std::string msg)
 		else ISCMD(listclients)
 		{
 			RCON* r = c->_rcon;
-			c->Send("ID\tIP");
+			c->Send("ID\tIP\tIdentified?");
 			for (int i = 0; i < r->clients.size(); i++)
 			{
 				Client* _c = r->clients[i];
 				if (_c != nullptr && _c->isConnected)
 				{
-					c->Sendex("#%i\t%s", i, ipaddr(_c).c_str());
+					c->Sendex("#%i\t%s\t%s", i, ipaddr(_c).c_str(), (_c->isIdentified ? "yes" : "no"));
 				}
 			}
 			return;
