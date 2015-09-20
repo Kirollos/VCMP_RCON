@@ -26,6 +26,8 @@ RCON* rcon = nullptr;
 HSQUIRRELVM sqvm;
 HSQAPI sqapi;
 
+std::map<std::string, TOGGLEABLEFUNCS> vcmp_toggleables;
+
 extern "C"
 {
 	EXPORT unsigned int VcmpPluginInit(PluginFuncs* pluginFuncs, PluginCallbacks* pluginCalls, PluginInfo* pluginInfo)
@@ -88,6 +90,7 @@ extern "C"
 			return 0;
 		}
 		Events::RegisterEvents(pluginCalls);
+		InitializeToggleables(&vcmp_toggleables, VCMP_PF);
 		VCMP_PF->printf("[RCON]: Plugin is enabled.");
 		return 1;
 	}
@@ -185,4 +188,25 @@ namespace ConfigUtils {
 			return 0;
 		return std::stoi(value);
 	}
+}
+
+void InitializeToggleables(std::map<std::string, TOGGLEABLEFUNCS>* togs, PluginFuncs* pf)
+{
+	(*togs)["syncfpslimiter"] = pf->ToggleSyncFrameLimiter;
+	(*togs)["fpslimiter"] = pf->ToggleFrameLimiter;
+	(*togs)["taxiboostjump"] = pf->ToggleTaxiBoostJump;
+	(*togs)["driveonwater"] = pf->ToggleDriveOnWater;
+	(*togs)["fastswitch"] = pf->ToggleFastSwitch;
+	(*togs)["friendlyfire"] = pf->ToggleFriendlyFire;
+	(*togs)["disabledriveby"] = pf->ToggleDisableDriveby;
+	(*togs)["perfecthandling"] = pf->TogglePerfectHandling;
+	(*togs)["flyingcars"] = pf->ToggleFlyingCars;
+	(*togs)["jumpswitch"] = pf->ToggleJumpSwitch;
+	(*togs)["showmarkers"] = pf->ToggleShowMarkers;
+	(*togs)["stuntbike"] = pf->ToggleStuntBike;
+	(*togs)["shootinair"] = pf->ToggleShootInAir;
+	(*togs)["shownametags"] = pf->ToggleShowNametags;
+	(*togs)["joinmessages"] = pf->ToggleJoinMessages;
+	(*togs)["deathmessages"] = pf->ToggleDeathMessages;
+	(*togs)["chattags"] = pf->ToggleChatTagsByDefaultEnabled;
 }

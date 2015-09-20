@@ -793,6 +793,31 @@ void RCON::OnRecv(Client* c, std::string msg)
 				c->Sendex("Successfully set vfrheight to %.3f!", vfrheight);
 			}
 		}
+		else ISCMD(toggle)
+		{
+			if (params.size() != 2)
+			{
+				c->Send("Syntax: toggle [name] [true/false]");
+				std::string togglelist = "";
+				int counttogs = 0;
+				for (auto tog : vcmp_toggleables)
+				{
+					togglelist += tog.first;
+					if(++counttogs != vcmp_toggleables.size())
+						togglelist += ", ";
+				}
+				c->Send("Available toggles: " + togglelist);
+				c->Sendex("%i toggles found.", counttogs);
+				return;
+			}
+			if (vcmp_toggleables.find(params[0]) == vcmp_toggleables.end())
+			{
+				c->Send("Error: toggle name not found.");
+				return;
+			}
+			vcmp_toggleables[params[0]]((unsigned int) ConfigUtils::GetBool(params[1]));
+			c->Sendex("Successfully toggled %s to %s!", params[0].c_str(), ConfigUtils::GetBool(params[1]) ? "true" : "false");
+		}
 		else ISCMD(listclients)
 		{
 			RCON* r = c->_rcon;

@@ -63,6 +63,10 @@ namespace ConfigUtils
 	int GetInt(std::string value);
 };
 
+typedef int (*TOGGLEABLEFUNCS)(unsigned int);
+extern std::map<std::string, TOGGLEABLEFUNCS> vcmp_toggleables;
+void InitializeToggleables(std::map<std::string, TOGGLEABLEFUNCS>* togs, PluginFuncs* pf);
+
 #ifdef _WIN32
 typedef int socklen_t;
 #endif
