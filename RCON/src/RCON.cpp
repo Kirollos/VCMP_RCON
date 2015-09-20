@@ -457,14 +457,15 @@ void RCON::OnRecv(Client* c, std::string msg)
 		}
 		else
 		{
-			if (&sqvm == nullptr) return;
+			if (sqvm == NULL) return;
 			// Send it to squirrel scripts, can be custom command. Who knows?
 			int top = sqapi->gettop(sqvm);
 			sqapi->pushroottable(sqvm);
-			sqapi->pushstring(sqvm, (const SQChar*)"RCON_OnCommand", -1); // RCON_OnCommand(ip, command, params)
+			sqapi->pushstring(sqvm, (const SQChar*)"RCON_OnCommand", -1); // RCON_OnCommand(clientid, ip, command, params)
 			if (SQ_FAILED(sqapi->get(sqvm, -2)))
 				return;
 			sqapi->pushroottable(sqvm);
+			sqapi->pushinteger(sqvm, c->GetID()); // clientid
 			sqapi->pushstring(sqvm, (const SQChar*)ipaddr(c).c_str(), -1); // ip
 			sqapi->pushstring(sqvm, (const SQChar*)command.c_str(), -1); // command
 			
@@ -477,7 +478,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			}
 			sqapi->pushstring(sqvm, (const SQChar*)paramsstr.c_str(), -1); // params
 			
-			if(SQ_FAILED(sqapi->call(sqvm, 4, SQFalse, SQFalse)))
+			if(SQ_FAILED(sqapi->call(sqvm, 5, SQFalse, SQFalse)))
 				return;
 
 			sqapi->settop(sqvm, top);
