@@ -64,7 +64,7 @@ namespace Events
 		char* kName = new char[100];
 		kName[0] = 0;
 		VCMP_PF->GetPlayerName(killerid, kName, 100);
-		rcon->Broadcastex("[DEATH] %s has died, killer:%s[%i], reason:%i, bodypart:%i", pName, playerid, kName, killerid, reason, bodypart);
+		rcon->Broadcastex("[DEATH] %s[%i] has died, killer:%s[%i], reason:%i, bodypart:%i", pName, playerid, kName, killerid, reason, bodypart);
 		delete pName;
 		delete kName;
 	}
