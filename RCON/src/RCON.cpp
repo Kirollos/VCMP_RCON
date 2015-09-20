@@ -264,13 +264,16 @@ void RCON::OnRecv(Client* c, std::string msg)
 		ISCMD(help)
 		{
 			// Available commands will be listed in here
-			c->Send("Command\t\tDescription");
 			int i;
 			for (i = 0; i < sizeof(commands) / sizeof(commands[0]); i++)
 			{
-				c->Sendex("%s\t\t%s", commands[i][0].c_str(), commands[i][1].c_str());
+				c->Send("=====================================");
+				c->Sendex("Command: %s", commands[i][0].c_str());
+				c->Sendex("Description: %s", commands[i][1].c_str());
+				c->Sendex("Parameters: %s", commands[i][2].c_str());
+				c->Send("=====================================");
 			}
-			c->Send("===================================");
+			c->Send("\n\n\n");
 			c->Sendex("Current available RCON commands: %i", i);
 		}
 		else ISCMD(kick)
@@ -456,6 +459,325 @@ void RCON::OnRecv(Client* c, std::string msg)
 				c->Sendex("#%i\t%s\t%s\t%i\t%i", i, name.c_str(), ip.c_str(), ping, score);
 			}
 			return;
+		}
+		else ISCMD(servername)
+		{
+			if (params.size() == 0)
+			{
+				char* ServerName = new char[1024];
+				VCMP_PF->GetServerName(ServerName, 1024);
+				c->Sendex("Server name: %s", ServerName);
+				delete ServerName;
+			}
+			else
+			{
+				std::string ServerName = "";
+				for (int i = 0; i < (int)params.size(); i++)
+				{
+					ServerName += params[i];
+					if (i != params.size() - 1)
+						ServerName += " ";
+				}
+				VCMP_PF->SetServerName(ServerName.c_str());
+				c->Sendex("Successfully set server name to: %s!", ServerName.c_str());
+			}
+		}
+		else ISCMD(maxplayers)
+		{
+			if (params.size() == 0)
+			{
+				int maxplayers = VCMP_PF->GetMaxPlayers();
+				c->Sendex("Max players: %i", maxplayers);
+			}
+			else
+			{
+				int maxplayers;
+				try {
+					maxplayers = std::stoi(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: maxplayers [slots]");
+					return;
+				}
+				VCMP_PF->SetMaxPlayers(maxplayers);
+				c->Sendex("Successfully set max players to %i!", maxplayers);
+			}
+		}
+		else ISCMD(serverpassword)
+		{
+			if (params.size() == 0)
+			{
+				char* ServerPassword = new char[100];
+				VCMP_PF->GetServerPassword(ServerPassword, 100);
+				c->Sendex("Server password: %s", ServerPassword);
+				delete ServerPassword;
+			}
+			else
+			{
+				std::string ServerPassword = "";
+				for (int i = 0; i < (int)params.size(); i++)
+				{
+					ServerPassword += params[i];
+					if (i != params.size() - 1)
+						ServerPassword += " ";
+				}
+				VCMP_PF->SetServerPassword((char*) ServerPassword.c_str());
+				c->Sendex("Successfully set server password to: %s!", ServerPassword.c_str());
+			}
+		}
+		else ISCMD(gamemodetext)
+		{
+			if (params.size() == 0)
+			{
+				char* GamemodeText = new char[1024];
+				VCMP_PF->GetGameModeText(GamemodeText, 1024);
+				c->Sendex("Gamemode Text: %s", GamemodeText);
+				delete GamemodeText;
+			}
+			else
+			{
+				std::string GamemodeText = "";
+				for (int i = 0; i < (int)params.size(); i++)
+				{
+					GamemodeText += params[i];
+					if (i != params.size() - 1)
+						GamemodeText += " ";
+				}
+				VCMP_PF->SetGameModeText(GamemodeText.c_str());
+				c->Sendex("Successfully set Gamemode Text to: %s!", GamemodeText.c_str());
+			}
+		}
+		else ISCMD(timerate)
+		{
+			if (params.size() == 0)
+			{
+				int timerate = VCMP_PF->GetTimeRate();
+				c->Sendex("Time rate: %i", timerate);
+			}
+			else
+			{
+				int timerate;
+				try {
+					timerate = std::stoi(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: timerate [rate]");
+					return;
+				}
+				VCMP_PF->SetTimeRate(timerate);
+				c->Sendex("Successfully set time rate to %i!", timerate);
+			}
+		}
+		else ISCMD(hour)
+		{
+			if (params.size() == 0)
+			{
+				int hour = VCMP_PF->GetHour();
+				c->Sendex("Hour: %i", hour);
+			}
+			else
+			{
+				int hour;
+				try {
+					hour = std::stoi(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: hour [new hour]");
+					return;
+				}
+				VCMP_PF->SetHour(hour);
+				c->Sendex("Successfully set hour to %i!", hour);
+			}
+		}
+		else ISCMD(minute)
+		{
+			if (params.size() == 0)
+			{
+				int minute = VCMP_PF->GetMinute();
+				c->Sendex("Minute: %i", minute);
+			}
+			else
+			{
+				int minute;
+				try {
+					minute = std::stoi(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: minute [new minute]");
+					return;
+				}
+				VCMP_PF->SetMinute(minute);
+				c->Sendex("Successfully set minute to %i!", minute);
+			}
+		}
+		else ISCMD(weather)
+		{
+			if (params.size() == 0)
+			{
+				int weather = VCMP_PF->GetWeather();
+				c->Sendex("Weather: %i", weather);
+			}
+			else
+			{
+				int weather;
+				try {
+					weather = std::stoi(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: weather [new weather]");
+					return;
+				}
+				VCMP_PF->SetWeather(weather);
+				c->Sendex("Successfully set weather to %i!", weather);
+			}
+		}
+		else ISCMD(gravity)
+		{
+			if (params.size() == 0)
+			{
+				double gravity = VCMP_PF->GetGravity();
+				c->Sendex("Gravity: %.3f", gravity);
+			}
+			else
+			{
+				double gravity;
+				try {
+					gravity = std::stod(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: gravity [new gravity]");
+					return;
+				}
+				VCMP_PF->SetGravity(gravity);
+				c->Sendex("Successfully set gravity to %.3f!", gravity);
+			}
+		}
+		else ISCMD(gamespeed)
+		{
+			if (params.size() == 0)
+			{
+				double gamespeed = VCMP_PF->GetGamespeed();
+				c->Sendex("Game speed: %.3f", gamespeed);
+			}
+			else
+			{
+				double gamespeed;
+				try {
+					gamespeed = std::stod(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: gamespeed [new gamespeed]");
+					return;
+				}
+				VCMP_PF->SetGamespeed(gamespeed);
+				c->Sendex("Successfully set Game speed to %.3f!", gamespeed);
+			}
+		}
+		else ISCMD(waterlevel)
+		{
+			if (params.size() == 0)
+			{
+				double waterlevel = VCMP_PF->GetWaterLevel();
+				c->Sendex("Water level: %.3f", waterlevel);
+			}
+			else
+			{
+				double waterlevel;
+				try {
+					waterlevel = std::stod(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: waterlevel [new waterlevel]");
+					return;
+				}
+				VCMP_PF->SetWaterLevel(waterlevel);
+				c->Sendex("Successfully set Water level to %.3f!", waterlevel);
+			}
+		}
+		else ISCMD(maxheight)
+		{
+			if (params.size() == 0)
+			{
+				double maxheight = VCMP_PF->GetMaxHeight();
+				c->Sendex("Max height: %.3f", maxheight);
+			}
+			else
+			{
+				double maxheight;
+				try {
+					maxheight = std::stod(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: maxheight [new maxheight]");
+					return;
+				}
+				VCMP_PF->SetMaxHeight(maxheight);
+				c->Sendex("Successfully set Max height to %.3f!", maxheight);
+			}
+		}
+		else ISCMD(killcmddelay)
+		{
+			if (params.size() == 0)
+			{
+				int killcmddelay = VCMP_PF->GetKillCmdDelay();
+				c->Sendex("Kill command delay: %i", killcmddelay);
+			}
+			else
+			{
+				int killcmddelay;
+				try {
+					killcmddelay = std::stoi(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: killcmddelay [new killcmddelay]");
+					return;
+				}
+				VCMP_PF->SetKillCmdDelay(killcmddelay);
+				c->Sendex("Successfully set Kill command delay to %i!", killcmddelay);
+			}
+		}
+		else ISCMD(vfrheight) // Vehicle Forced Respawn Height
+		{
+			if (params.size() == 0)
+			{
+				double vfrheight = VCMP_PF->GetVehiclesForcedRespawnHeight();
+				c->Sendex("Vehicles Forced Respawn Height: %.3f", vfrheight);
+			}
+			else
+			{
+				double vfrheight;
+				try {
+					vfrheight = std::stod(params[0]);
+				}
+				catch (...)
+				{
+					c->Send("Error: Invalid parameter.");
+					c->Send("Syntax: vfrheight [new height]");
+					return;
+				}
+				VCMP_PF->SetVehiclesForcedRespawnHeight(vfrheight);
+				c->Sendex("Successfully set vfrheight to %.3f!", vfrheight);
+			}
 		}
 		else ISCMD(listclients)
 		{
