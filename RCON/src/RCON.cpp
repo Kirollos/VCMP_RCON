@@ -474,6 +474,24 @@ void RCON::OnRecv(Client* c, std::string msg)
 			}
 			return;
 		}
+		else ISCMD(say)
+		{
+			if (params.size() == 0)
+			{
+				c->Send("Syntax: say [message]");
+				return;
+			}
+			std::string message = "";
+			for (int i = 0; i < (int)params.size(); i++)
+			{
+				message += params[i];
+				if (i != params.size() - 1)
+					message += " ";
+			}
+			for (unsigned int playerid = 0; playerid < (unsigned int)VCMP_PF->GetMaxPlayers(); playerid++)
+				if (VCMP_PF->IsPlayerConnected(playerid))
+					VCMP_PF->SendClientMessage(playerid, 0xFFFFFFFF, "RCON Admin: %s", message.c_str());
+		}
 		else ISCMD(servername)
 		{
 			if (params.size() == 0)
