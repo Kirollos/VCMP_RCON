@@ -490,3 +490,14 @@ void RCON::OnClientDisconnect(Client* c)
 {
 	VCMP_PF->printf("A client has disconnected! (IP: %s)", ipaddr(c).c_str());
 }
+
+Client* RCON::GetClient(int id)
+{
+	try {
+		return this->clients.at(id);
+	}
+	catch (...)
+	{
+		return nullptr;
+	}
+}

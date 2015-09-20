@@ -73,6 +73,7 @@ public:
 	int Broadcastex(const char* format, ...);
 	static void OnRecv(Client* c, std::string msg);
 	void OnClientDisconnect(Client* c);
+	Client* GetClient(int id);
 };
 
 const std::string commands[][2] =
