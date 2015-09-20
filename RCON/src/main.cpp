@@ -18,6 +18,7 @@
 #include "RCON.h"
 #include "Client.h"
 #include "events.h"
+#include "SquirrelFunctions.h"
 
 PluginFuncs* VCMP_PF = nullptr;
 RCON* rcon = nullptr;
@@ -128,6 +129,8 @@ void OnSquirrelScriptLoad()
 		{
 			sqvm = *sqFuncs->GetSquirrelVM();
 			sqapi = *sqFuncs->GetSquirrelAPI();
+
+			SquirrelFuncs::RegisterFunctions(&sqvm);
 		}
 	}
 }

@@ -1,0 +1,72 @@
+/*
+	Copyright 2015 Kirollos
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
+
+#include "main.h"
+#include "SquirrelFunctions.h"
+
+namespace SquirrelFuncs
+{
+	void RegisterFunctions(HSQUIRRELVM* v)
+	{
+#define REGISTERSQFUNCTION(name) register_global_func(*v, #name, SquirrelFuncs::name)
+		REGISTERSQFUNCTION(RCON_Send);
+		REGISTERSQFUNCTION(RCON_Broadcast);
+	}
+
+	SQInteger RCON_Send(HSQUIRRELVM v) // RCON_Send(int clientid, string text);
+	{
+		SQInteger clientid;
+		const SQChar* text;
+
+		sq_getinteger(v, 2, &clientid);
+		sq_getstring(v, 3, &text);
+
+		Client* c = rcon->GetClient((int)clientid);
+		if (c == nullptr)
+		{
+			sq_pushbool(v, false);
+			return 1;
+		}
+		sq_pushbool(v, c->Send(std::string((char*) text)));
+		return 1;
+	}
+
+	SQInteger RCON_Broadcast(HSQUIRRELVM v) // RCON_Broadcast(string text);
+	{
+		const SQChar* text;
+
+		sq_getstring(v, 2, &text);
+		SQInteger count = 0;
+		for (auto& c : rcon->clients) {
+			if (c != nullptr)
+			{
+				if (c->Send(std::string((char*)text)))
+					count++;
+			}
+		}
+		sq_pushinteger(v, count);
+		return 1;
+	}
+}
+
+void register_global_func(HSQUIRRELVM vm, const char *name, SQFUNCTION function)
+{
+	sq_pushroottable(vm);
+	sq_pushstring(vm, (const SQChar*)name, -1);
+	sq_newclosure(vm, function, 0);
+	sq_createslot(vm, -3);
+	sq_pop(vm, 1);
+}

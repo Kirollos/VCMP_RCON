@@ -165,12 +165,14 @@
     <ClInclude Include="src\events.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\RCON.h" />
+    <ClInclude Include="src\SquirrelFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\events.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\RCON.cpp" />
+    <ClCompile Include="src\SquirrelFunctions.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
