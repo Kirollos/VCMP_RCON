@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squirrel", "squirrelsrc\squirrel\squirrel.vcxproj", "{13940DF3-6E53-495C-9A22-2E8999AE5E8F}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RCON", "RCON\RCON.vcxproj", "{ED8A17EB-3C75-45EC-A7D0-807F9AC6C37E}"
 EndProject
 Global
@@ -17,18 +15,6 @@ Global
 		Template|x86 = Template|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Debug|x64.ActiveCfg = Template|x64
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Debug|x64.Build.0 = Template|x64
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Debug|x86.ActiveCfg = Debug|Win32
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Debug|x86.Build.0 = Debug|Win32
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Release|x64.ActiveCfg = Template|x64
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Release|x64.Build.0 = Template|x64
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Release|x86.ActiveCfg = Release|Win32
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Release|x86.Build.0 = Release|Win32
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Template|x64.ActiveCfg = Template|x64
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Template|x64.Build.0 = Template|x64
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Template|x86.ActiveCfg = Template|Win32
-		{13940DF3-6E53-495C-9A22-2E8999AE5E8F}.Template|x86.Build.0 = Template|Win32
 		{ED8A17EB-3C75-45EC-A7D0-807F9AC6C37E}.Debug|x64.ActiveCfg = Release|x64
 		{ED8A17EB-3C75-45EC-A7D0-807F9AC6C37E}.Debug|x64.Build.0 = Release|x64
 		{ED8A17EB-3C75-45EC-A7D0-807F9AC6C37E}.Debug|x86.ActiveCfg = Debug|Win32
