@@ -32,16 +32,16 @@ namespace SquirrelFuncs
 		SQInteger clientid;
 		const SQChar* text;
 
-		sq_getinteger(v, 2, &clientid);
-		sq_getstring(v, 3, &text);
+		sqapi->getinteger(v, 2, &clientid);
+		sqapi->getstring(v, 3, &text);
 
 		Client* c = rcon->GetClient((int)clientid);
 		if (c == nullptr)
 		{
-			sq_pushbool(v, false);
+			sqapi->pushbool(v, false);
 			return 1;
 		}
-		sq_pushbool(v, c->Send(std::string((char*) text)));
+		sqapi->pushbool(v, c->Send(std::string((char*) text)));
 		return 1;
 	}
 
@@ -49,10 +49,10 @@ namespace SquirrelFuncs
 	{
 		const SQChar* text;
 
-		sq_getstring(v, 2, &text);
+		sqapi->getstring(v, 2, &text);
 		SQInteger count = 0;
 		count = rcon->Broadcast(std::string((char*)text));
-		sq_pushinteger(v, count);
+		sqapi->pushinteger(v, count);
 		return 1;
 	}
 
@@ -68,17 +68,17 @@ namespace SquirrelFuncs
 				... // etc..
 			]
 		*/
-		sq_newarray(v, 0); // main array
+		sqapi->newarray(v, 0); // main array
 		
 		for (Client* c : rcon->clients)
 		{
 			// client array
-			sq_newarray(v, 0); // client array
-			sq_pushstring(v, (const SQChar*)ipaddr(c).c_str(), -1); // ip
-			sq_arrayappend(v, -2);
-			sq_pushbool(v, (SQBool)c->isIdentified); // identified
-			sq_arrayappend(v, -2); // append to client array
-			sq_arrayappend(v, -2); // append client array to main array
+			sqapi->newarray(v, 0); // client array
+			sqapi->pushstring(v, (const SQChar*)ipaddr(c).c_str(), -1); // ip
+			sqapi->arrayappend(v, -2);
+			sqapi->pushbool(v, (SQBool)c->isIdentified); // identified
+			sqapi->arrayappend(v, -2); // append to client array
+			sqapi->arrayappend(v, -2); // append client array to main array
 		}
 		return 1;
 	}
@@ -86,9 +86,9 @@ namespace SquirrelFuncs
 
 void register_global_func(HSQUIRRELVM vm, const char *name, SQFUNCTION function)
 {
-	sq_pushroottable(vm);
-	sq_pushstring(vm, (const SQChar*)name, -1);
-	sq_newclosure(vm, function, 0);
-	sq_createslot(vm, -3);
-	sq_pop(vm, 1);
+	sqapi->pushroottable(vm);
+	sqapi->pushstring(vm, (const SQChar*)name, -1);
+	sqapi->newclosure(vm, function, 0);
+	sqapi->newslot(vm, -3, SQFalse);
+	sqapi->pop(vm, 1);
 }

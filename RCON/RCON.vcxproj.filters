@@ -24,24 +24,6 @@
     <ClInclude Include="inc\sqconfig.h">
       <Filter>Header Files\Squirrel</Filter>
     </ClInclude>
-    <ClInclude Include="inc\sqstdaux.h">
-      <Filter>Header Files\Squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\sqstdblob.h">
-      <Filter>Header Files\Squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\sqstdio.h">
-      <Filter>Header Files\Squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\sqstdmath.h">
-      <Filter>Header Files\Squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\sqstdstring.h">
-      <Filter>Header Files\Squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\sqstdsystem.h">
-      <Filter>Header Files\Squirrel</Filter>
-    </ClInclude>
     <ClInclude Include="inc\squirrel.h">
       <Filter>Header Files\Squirrel</Filter>
     </ClInclude>

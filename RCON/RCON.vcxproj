@@ -120,7 +120,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>squirrel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:libcmt %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep>
@@ -128,7 +128,7 @@
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>rename "$(SolutionDir)\$(Configuration)\RCONWin32.dll" RCONx86.dll</Command>
+      <Command>move "$(SolutionDir)\$(Configuration)\RCONWin32.dll" "$(SolutionDir)\$(Configuration)\RCONx86.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -142,7 +142,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>squirrel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:libcmt %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep>
@@ -150,7 +150,8 @@
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>rename "$(SolutionDir)\$(Configuration)\RCONWin32.dll" RCONx86.dll</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -169,14 +170,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>squirrel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>rename "$(SolutionDir)\$(Configuration)\RCONWin32.dll" RCONx86.dll</Command>
+      <Command>move "$(SolutionDir)\$(Configuration)\RCONWin32.dll" "$(SolutionDir)\$(Configuration)\RCONx86.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -195,14 +196,15 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>squirrel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>rename "$(SolutionDir)\$(Configuration)\RCONWin32.dll" RCONx86.dll</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -210,12 +212,6 @@
     <ClInclude Include="inc\SQModule.h" />
     <ClInclude Include="src\Client.h" />
     <ClInclude Include="inc\sqconfig.h" />
-    <ClInclude Include="inc\sqstdaux.h" />
-    <ClInclude Include="inc\sqstdblob.h" />
-    <ClInclude Include="inc\sqstdio.h" />
-    <ClInclude Include="inc\sqstdmath.h" />
-    <ClInclude Include="inc\sqstdstring.h" />
-    <ClInclude Include="inc\sqstdsystem.h" />
     <ClInclude Include="inc\squirrel.h" />
     <ClInclude Include="inc\VCMP.h" />
     <ClInclude Include="src\events.h" />
