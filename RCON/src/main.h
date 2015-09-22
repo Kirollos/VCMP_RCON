@@ -29,7 +29,6 @@
 #include <string>
 #include <fstream>
 #include <map>
-#include <squirrel.h>
 #include <SQImports.h>
 #include <VCMP.h>
 #include "RCON.h"

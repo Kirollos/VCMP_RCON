@@ -36,7 +36,7 @@ extern "C"
 		Sleep(5000); // In need to attach debugger sometimes
 #endif
 		strcpy(pluginInfo->szName, "RCON");
-		pluginInfo->uPluginVer = 0x1000;
+		pluginInfo->uPluginVer = 0x1001;
 		VCMP_PF = pluginFuncs;
 		VCMP_PF->printf("Initializing RCON...");
 		

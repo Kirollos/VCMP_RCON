@@ -85,6 +85,7 @@ const std::string commands[][3] =
 	{"banip", "Bans the given IP from the server", "[IPv4]"},
 	{"unbanip", "Unbans the given IP from the server", "[IPv4]"},
 	{"players", "Lists the connected players with basic info", ""},
+	{"say", "Sends a message to the game", "[message]"},
 	{"servername", "Gets/Sets the server name", "get: none, set: [server name]"},
 	{"maxplayers", "Gets/Sets the maxplayers", "get: none, set: [slots]"},
 	{"serverpassword", "Gets/Sets the server password", "get: none, set: [password]"},
