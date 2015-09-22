@@ -1,0 +1,50 @@
+<!--
+	Copyright 2015 Kirollos
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.js"></script>
+<script src="jquery.mousewheel.js"></script>
+<script src="jquery.terminal.js"></script>
+<link href="jquery.terminal.css" rel="stylesheet"/>
+<!-- Gonna use the cdn instead
+<script src="/socket.io/socket.io.js"></script>
+-->
+<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
+<script src="/CONFIG"></script>
+<script>
+var socket = io((RCON_Config.usessl == true ? 'https' : 'http') + '://'+RCON_Config.webhost_ip+':'+RCON_Config.webhost_port);
+$(document).ready(function(){
+	    $('body').terminal(function(command, term) {
+	        if (command !== '') {
+	            socket.emit('on-send', {cmd: command});
+	        }
+	    }, {
+	        greetings: '',
+	        name: 'RCON',
+	        height: 200,
+	        width: 750,
+	        prompt: 'VCMP> '});
+	    socket.on('on-receive', function(data)
+	    {
+	    	$("body").terminal().echo(data.resp);
+	    });
+	    socket.on('rip', function()
+	    {
+	    	alert("Server closed your RCON connection.");
+	    	$("body").terminal().disable(); // why not
+	    });
+
+  });
+</script>
