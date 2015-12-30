@@ -210,6 +210,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 {
 	if (msg.empty()) return;
 	msg.erase(msg.find_last_of("\r\n", msg.length() - 2));
+	if (msg.empty()) return;
 
 	std::istringstream cmd(msg);
 	std::istream_iterator<std::string> linebeg(cmd), lineend;
