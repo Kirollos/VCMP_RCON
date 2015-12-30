@@ -871,7 +871,10 @@ void RCON::OnRecv(Client* c, std::string msg)
 				if (i != params.size() - 1)
 					paramsstr += " ";
 			}
-			sqapi->pushstring(sqvm, (const SQChar*)paramsstr.c_str(), -1); // params
+			if (paramsstr == "" && !params.size())
+				sqapi->pushnull(sqvm); // null if no parameters
+			else
+				sqapi->pushstring(sqvm, (const SQChar*)paramsstr.c_str(), -1); // params
 			
 			if(SQ_FAILED(sqapi->call(sqvm, 5, SQFalse, SQFalse)))
 				return;
