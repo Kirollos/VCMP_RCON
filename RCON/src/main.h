@@ -33,6 +33,8 @@
 #include <VCMP.h>
 #include "RCON.h"
 
+#define VERSION 0x1010
+
 #ifdef _WIN32
 #define RN "\r\n"
 #else

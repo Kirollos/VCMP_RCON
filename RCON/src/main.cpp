@@ -36,8 +36,13 @@ extern "C"
 		Sleep(5000); // In need to attach debugger sometimes
 #endif
 		strcpy(pluginInfo->szName, "RCON");
-		pluginInfo->uPluginVer = 0x1001;
+		pluginInfo->uPluginVer = VERSION;
+		int v_major = (VERSION & 0xF000) >> 12,
+			v_minor = (VERSION & 0xF00) >> 8,
+			v_patch = (VERSION & 0xF0) >> 4,
+			v_spatch = (VERSION & 0xF);
 		VCMP_PF = pluginFuncs;
+		VCMP_PF->printf("RCON plugin v%d.%d.%d.%d (c) Kirollos 2015-2016", v_major, v_minor, v_patch, v_spatch);
 		VCMP_PF->printf("Initializing RCON...");
 		
 		std::string enabled = ConfigUtils::GetConfigValue("rcon_enabled"),
