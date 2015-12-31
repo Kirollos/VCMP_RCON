@@ -90,6 +90,14 @@ bool Client::Sendex(const char* format, ...)
 bool Client::Disconnect()
 {
 	isConnected = false;
+	for (std::vector<Client*>::iterator it = this->_rcon->clients.begin(); it != this->_rcon->clients.end(); it++)
+	{
+		if (*it == this)
+		{
+			this->_rcon->clients.erase(it);
+			break;
+		}
+	}
 	return shutdown(this->csock, SD_BOTH) == 0;
 }
 
