@@ -27,6 +27,7 @@ namespace Events
 		vccb->OnPlayerDeath = Events::OnPlayerDeath;
 		vccb->OnPublicMessage = Events::OnMessage;
 		vccb->OnCommandMessage = Events::OnCommand;
+		VCMP_PF->printf("[RCON]: Events successfully registered!");
 	}
 
 	void OnPlayerConnect(int playerid)

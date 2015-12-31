@@ -43,7 +43,8 @@ extern "C"
 		std::string enabled = ConfigUtils::GetConfigValue("rcon_enabled"),
 			port = ConfigUtils::GetConfigValue("rcon_port"),
 			bindip = ConfigUtils::GetConfigValue("rcon_bindip"),
-			password = ConfigUtils::GetConfigValue("rcon_password");
+			password = ConfigUtils::GetConfigValue("rcon_password"),
+			eevents = ConfigUtils::GetConfigValue("rcon_enableevents");
 
 		if (enabled == "ERR_NOT_FOUND")
 		{
@@ -64,6 +65,11 @@ extern "C"
 		{
 			ConfigUtils::AppendConfig("rcon_password", "plschange");
 			password = "plschange";
+		}
+		if (eevents == "ERR_NOT_FOUND")
+		{
+			ConfigUtils::AppendConfig("rcon_enableevents", "true");
+			eevents = "true";
 		}
 
 		if (!ConfigUtils::GetBool(enabled))
@@ -89,7 +95,8 @@ extern "C"
 			VCMP_PF->printf("[RCON]: Failed to initialize the plugin, given error: %s", e.what());
 			return 0;
 		}
-		Events::RegisterEvents(pluginCalls);
+		if(ConfigUtils::GetBool(eevents))
+			Events::RegisterEvents(pluginCalls);
 		InitializeToggleables(&vcmp_toggleables, VCMP_PF);
 		VCMP_PF->printf("[RCON]: Plugin is enabled.");
 		return 1;
