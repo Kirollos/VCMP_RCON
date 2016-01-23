@@ -64,6 +64,9 @@ namespace ConfigUtils
 	int GetInt(std::string value);
 };
 
+void GetRVersion(int* major, int* minor, int* patch, int* spatch);
+void GetRVersion(char* ret);
+
 typedef int (*TOGGLEABLEFUNCS)(unsigned int);
 extern std::map<std::string, TOGGLEABLEFUNCS> vcmp_toggleables;
 void InitializeToggleables(std::map<std::string, TOGGLEABLEFUNCS>* togs, PluginFuncs* pf);

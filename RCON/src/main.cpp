@@ -37,13 +37,12 @@ extern "C"
 #endif
 		strcpy(pluginInfo->szName, "RCON");
 		pluginInfo->uPluginVer = VERSION;
-		int v_major = (VERSION & 0xF000) >> 12,
-			v_minor = (VERSION & 0xF00) >> 8,
-			v_patch = (VERSION & 0xF0) >> 4,
-			v_spatch = (VERSION & 0xF);
 		VCMP_PF = pluginFuncs;
-		VCMP_PF->printf("RCON plugin v%d.%d.%d.%d (c) Kirollos 2015-2016", v_major, v_minor, v_patch, v_spatch);
+		char* version = new char[20];
+		GetRVersion(version);
+		VCMP_PF->printf("RCON plugin v%s (c) Kirollos 2015-2016", version);
 		VCMP_PF->printf("Initializing RCON...");
+		delete version;
 		
 		std::string enabled = ConfigUtils::GetConfigValue("rcon_enabled"),
 			port = ConfigUtils::GetConfigValue("rcon_port"),
@@ -200,6 +199,22 @@ namespace ConfigUtils {
 			return 0;
 		return std::stoi(value);
 	}
+}
+
+void GetRVersion(int* major, int* minor, int* patch, int* spatch)
+{
+	*major = (VERSION & 0xF000) >> 12,
+	*minor = (VERSION & 0xF00) >> 8,
+	*patch = (VERSION & 0xF0) >> 4,
+	*spatch = (VERSION & 0xF);
+}
+
+void GetRVersion(char* ret)
+{
+	int v_major, v_minor, v_patch, v_spatch;
+	GetRVersion(&v_major, &v_minor, &v_patch, &v_spatch);
+	ret[0] = '\0';
+	sprintf(ret, "%d.%d.%d.%d", v_major, v_minor, v_patch, v_spatch);
 }
 
 void InitializeToggleables(std::map<std::string, TOGGLEABLEFUNCS>* togs, PluginFuncs* pf)
