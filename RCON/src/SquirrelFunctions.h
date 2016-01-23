@@ -27,6 +27,7 @@ namespace SquirrelFuncs
 	SQInteger RCON_Send(HSQUIRRELVM v); // RCON_Send(int clientid, string text);
 	SQInteger RCON_Broadcast(HSQUIRRELVM v); // RCON_Broadcast(string text);
 	SQInteger RCON_GetClients(HSQUIRRELVM v); // RCON_GetClients();
+	SQInteger RCON_KickClient(HSQUIRRELVM v); // RCON_KickClient(int clientid);
 }
 
 void register_global_func(HSQUIRRELVM vm, const char *name, SQFUNCTION function);

@@ -25,6 +25,7 @@ namespace SquirrelFuncs
 		REGISTERSQFUNCTION(RCON_Send);
 		REGISTERSQFUNCTION(RCON_Broadcast);
 		REGISTERSQFUNCTION(RCON_GetClients);
+		REGISTERSQFUNCTION(RCON_KickClient);
 	}
 
 	SQInteger RCON_Send(HSQUIRRELVM v) // RCON_Send(int clientid, string text);
@@ -80,6 +81,24 @@ namespace SquirrelFuncs
 			sqapi->arrayappend(v, -2); // append to client array
 			sqapi->arrayappend(v, -2); // append client array to main array
 		}
+		return 1;
+	}
+
+	SQInteger RCON_KickClient(HSQUIRRELVM v) // RCON_KickClient(int clientid);
+	{
+		SQInteger clientid;
+
+		sqapi->getinteger(v, 2, &clientid);
+
+		Client* c = rcon->GetClient((int)clientid);
+		if (c == nullptr)
+		{
+			sqapi->pushbool(v, false);
+			return 1;
+		}
+		c->Send("[NOTICE]: Your client has been disconnected by the server.");
+		c->Disconnect();
+		sqapi->pushbool(v, true);
 		return 1;
 	}
 }
