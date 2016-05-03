@@ -26,7 +26,7 @@ RCON* rcon = nullptr;
 HSQUIRRELVM sqvm;
 HSQAPI sqapi;
 
-std::map<std::string, TOGGLEABLEFUNCS> vcmp_toggleables;
+std::map<std::string, vcmpServerOption> vcmp_toggleables;
 
 extern "C"
 {
@@ -35,13 +35,15 @@ extern "C"
 #ifdef _DEBUG
 		Sleep(5000); // In need to attach debugger sometimes
 #endif
-		strcpy(pluginInfo->szName, "RCON");
-		pluginInfo->uPluginVer = VERSION;
+		strcpy(pluginInfo->name, "RCON");
+		pluginInfo->pluginVersion = VERSION;
+		pluginInfo->apiMajorVersion = 2;
+		pluginInfo->apiMinorVersion = 0;
 		VCMP_PF = pluginFuncs;
 		char* version = new char[20];
 		GetRVersion(version);
-		VCMP_PF->printf("RCON plugin v%s (c) Kirollos 2015-2016", version);
-		VCMP_PF->printf("Initializing RCON...");
+		VCMP_PF->LogMessage("RCON plugin v%s (c) Kirollos 2015-2016", version);
+		VCMP_PF->LogMessage("Initializing RCON...");
 		delete version;
 		
 		std::string enabled = ConfigUtils::GetConfigValue("rcon_enabled"),
@@ -78,7 +80,7 @@ extern "C"
 
 		if (!ConfigUtils::GetBool(enabled))
 		{
-			VCMP_PF->printf("[RCON]: Plugin is disabled.");
+			VCMP_PF->LogMessage("[RCON]: Plugin is disabled.");
 			return 1;
 		}
 
@@ -89,25 +91,25 @@ extern "C"
 		if (password.empty())
 			password = "plschange";
 		
-		pluginCalls->OnShutdownServer = OnShutdown;
-		pluginCalls->OnInternalCommand = OnInternalCommand;
+		pluginCalls->OnServerShutdown = OnShutdown;
+		pluginCalls->OnPluginCommand = OnInternalCommand;
 		try {
 			rcon = new RCON(ConfigUtils::GetInt(port), bindip, password);
 		}
 		catch (std::exception& e)
 		{
-			VCMP_PF->printf("[RCON]: Failed to initialize the plugin, given error: %s", e.what());
+			VCMP_PF->LogMessage("[RCON]: Failed to initialize the plugin, given error: %s", e.what());
 			return 0;
 		}
 		if(ConfigUtils::GetBool(eevents))
 			Events::RegisterEvents(pluginCalls);
 		InitializeToggleables(&vcmp_toggleables, VCMP_PF);
-		VCMP_PF->printf("[RCON]: Plugin is enabled.");
+		VCMP_PF->LogMessage("[RCON]: Plugin is enabled.");
 		return 1;
 	}
 }
 
-int OnInternalCommand(unsigned int uCmdType, const char* pszText)
+uint8_t OnInternalCommand(uint32_t uCmdType, const char* pszText)
 {
 	switch (uCmdType)
 	{
@@ -132,9 +134,9 @@ void OnShutdown()
 
 void OnSquirrelScriptLoad()
 {
-	unsigned int size;
-	int sqID = VCMP_PF->FindPlugin("SQHost2");
-	void** sqExports = VCMP_PF->GetPluginExports(sqID, &size);
+	size_t size;
+	int32_t sqID = VCMP_PF->FindPlugin("SQHost2");
+	const void** sqExports = VCMP_PF->GetPluginExports(sqID, &size);
 
 	if (sqExports != NULL && size > 0)
 	{
@@ -217,23 +219,23 @@ void GetRVersion(char* ret)
 	sprintf(ret, "%d.%d.%d.%d", v_major, v_minor, v_patch, v_spatch);
 }
 
-void InitializeToggleables(std::map<std::string, TOGGLEABLEFUNCS>* togs, PluginFuncs* pf)
+void InitializeToggleables(std::map<std::string, vcmpServerOption>* togs, PluginFuncs* pf)
 {
-	(*togs)["syncfpslimiter"] = pf->ToggleSyncFrameLimiter;
-	(*togs)["fpslimiter"] = pf->ToggleFrameLimiter;
-	(*togs)["taxiboostjump"] = pf->ToggleTaxiBoostJump;
-	(*togs)["driveonwater"] = pf->ToggleDriveOnWater;
-	(*togs)["fastswitch"] = pf->ToggleFastSwitch;
-	(*togs)["friendlyfire"] = pf->ToggleFriendlyFire;
-	(*togs)["disabledriveby"] = pf->ToggleDisableDriveby;
-	(*togs)["perfecthandling"] = pf->TogglePerfectHandling;
-	(*togs)["flyingcars"] = pf->ToggleFlyingCars;
-	(*togs)["jumpswitch"] = pf->ToggleJumpSwitch;
-	(*togs)["showmarkers"] = pf->ToggleShowMarkers;
-	(*togs)["stuntbike"] = pf->ToggleStuntBike;
-	(*togs)["shootinair"] = pf->ToggleShootInAir;
-	(*togs)["shownametags"] = pf->ToggleShowNametags;
-	(*togs)["joinmessages"] = pf->ToggleJoinMessages;
-	(*togs)["deathmessages"] = pf->ToggleDeathMessages;
-	(*togs)["chattags"] = pf->ToggleChatTagsByDefaultEnabled;
+	(*togs)["syncfpslimiter"] = vcmpServerOption::vcmpServerOptionSyncFrameLimiter;
+	(*togs)["fpslimiter"] = vcmpServerOption::vcmpServerOptionFrameLimiter;
+	(*togs)["taxiboostjump"] = vcmpServerOption::vcmpServerOptionTaxiBoostJump;
+	(*togs)["driveonwater"] = vcmpServerOption::vcmpServerOptionDriveOnWater;
+	(*togs)["fastswitch"] = vcmpServerOption::vcmpServerOptionFastSwitch;
+	(*togs)["friendlyfire"] = vcmpServerOption::vcmpServerOptionFriendlyFire;
+	(*togs)["disabledriveby"] = vcmpServerOption::vcmpServerOptionDisableDriveBy;
+	(*togs)["perfecthandling"] = vcmpServerOption::vcmpServerOptionPerfectHandling;
+	(*togs)["flyingcars"] = vcmpServerOption::vcmpServerOptionFlyingCars;
+	(*togs)["jumpswitch"] = vcmpServerOption::vcmpServerOptionJumpSwitch;
+	(*togs)["showmarkers"] = vcmpServerOption::vcmpServerOptionShowMarkers;
+	(*togs)["stuntbike"] = vcmpServerOption::vcmpServerOptionStuntBike;
+	(*togs)["shootinair"] = vcmpServerOption::vcmpServerOptionShootInAir;
+	(*togs)["shownametags"] = vcmpServerOption::vcmpServerOptionShowNameTags;
+	(*togs)["joinmessages"] = vcmpServerOption::vcmpServerOptionJoinMessages;
+	(*togs)["deathmessages"] = vcmpServerOption::vcmpServerOptionDeathMessages;
+	(*togs)["chattags"] = vcmpServerOption::vcmpServerOptionChatTagsEnabled;
 }

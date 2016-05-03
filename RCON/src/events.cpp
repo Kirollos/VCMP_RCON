@@ -25,12 +25,12 @@ namespace Events
 		vccb->OnPlayerDisconnect = Events::OnPlayerDisconnect;
 		vccb->OnPlayerSpawn = Events::OnPlayerSpawn;
 		vccb->OnPlayerDeath = Events::OnPlayerDeath;
-		vccb->OnPublicMessage = Events::OnMessage;
-		vccb->OnCommandMessage = Events::OnCommand;
-		VCMP_PF->printf("[RCON]: Events successfully registered!");
+		vccb->OnPlayerMessage = Events::OnMessage;
+		vccb->OnPlayerCommand = Events::OnCommand;
+		VCMP_PF->LogMessage("[RCON]: Events successfully registered!");
 	}
 
-	void OnPlayerConnect(int playerid)
+	void OnPlayerConnect(int32_t playerid)
 	{
 		char* pName = new char[100];
 		pName[0] = 0;
@@ -39,7 +39,7 @@ namespace Events
 		delete pName;
 	}
 
-	void OnPlayerDisconnect(int playerid, int nReason)
+	void OnPlayerDisconnect(int32_t playerid, vcmpDisconnectReason nReason)
 	{
 		char* pName = new char[100];
 		pName[0] = 0;
@@ -48,7 +48,7 @@ namespace Events
 		delete pName;
 	}
 
-	void OnPlayerSpawn(int playerid)
+	void OnPlayerSpawn(int32_t playerid)
 	{
 		char* pName = new char[100];
 		pName[0] = 0;
@@ -57,7 +57,7 @@ namespace Events
 		delete pName;
 	}
 
-	void OnPlayerDeath(int playerid, int killerid, int reason, int bodypart)
+	void OnPlayerDeath(int32_t playerid, int32_t killerid, int32_t reason, vcmpBodyPart bodypart)
 	{
 		char* pName = new char[100];
 		pName[0] = 0;
@@ -70,7 +70,7 @@ namespace Events
 		delete kName;
 	}
 
-	int OnMessage(int playerid, const char* message)
+	uint8_t OnMessage(int32_t playerid, const char* message)
 	{
 		char* pName = new char[100];
 		pName[0] = 0;
@@ -80,7 +80,7 @@ namespace Events
 		return 1;
 	}
 
-	int OnCommand(int playerid, const char* message)
+	uint8_t OnCommand(int32_t playerid, const char* message)
 	{
 		char* pName = new char[100];
 		pName[0] = 0;

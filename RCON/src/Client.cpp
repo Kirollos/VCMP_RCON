@@ -28,7 +28,7 @@ Client::Client(SOCKET s, SOCKET c, sockaddr_in cs, RCON* r)
 	this->isConnected = true;
 	this->sockthread = new std::thread(Client::Loop, this);
 	this->sockthread->detach();
-	VCMP_PF->printf("[RCON]: A client has connected! (IP: %s)", ipaddr(this).c_str());
+	VCMP_PF->LogMessage("[RCON]: A client has connected! (IP: %s)", ipaddr(this).c_str());
 	char* version = new char[20];
 	GetRVersion(version);
 	this->Sendex("VCMP-RCON v%s", version);
