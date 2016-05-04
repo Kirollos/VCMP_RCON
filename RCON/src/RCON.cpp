@@ -227,13 +227,13 @@ void RCON::OnRecv(Client* c, std::string msg)
 				if (params[0] == c->_rcon->password)
 				{
 					c->Send("Successfully identified!");
-					VCMP_PF->printf("[RCON]: Client (IP: %s) has successfully logged in!", ipaddr(c).c_str());
+					VCMP_PF->LogMessage("[RCON]: Client (IP: %s) has successfully logged in!", ipaddr(c).c_str());
 					c->isIdentified = true;
 				}
 				else
 				{
 					c->Send("Error: Incorrect password!");
-					VCMP_PF->printf("[RCON]: Client (IP: %s) has failed to logged in. Password: %s", ipaddr(c).c_str(), params[0].c_str());
+					VCMP_PF->LogMessage("[RCON]: Client (IP: %s) has failed to logged in. Password: %s", ipaddr(c).c_str(), params[0].c_str());
 				}
 			}
 			else
@@ -256,11 +256,11 @@ void RCON::OnRecv(Client* c, std::string msg)
 		if (!c->isIdentified)
 		{
 			c->Send("Error: You are not authorized to execute this command!");
-			VCMP_PF->printf("[RCON]: Client (IP: %s) has attempted to execute \"%s\" before identifying.", ipaddr(c).c_str(), msg.c_str());
+			VCMP_PF->LogMessage("[RCON]: Client (IP: %s) has attempted to execute \"%s\" before identifying.", ipaddr(c).c_str(), msg.c_str());
 			return;
 		}
 
-		VCMP_PF->printf("[RCON]: Client (IP: %s) has executed \"%s\"", ipaddr(c).c_str(), msg.c_str());
+		VCMP_PF->LogMessage("[RCON]: Client (IP: %s) has executed \"%s\"", ipaddr(c).c_str(), msg.c_str());
 
 		ISCMD(help)
 		{
@@ -347,7 +347,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 				}
 			}
 			c->Send("Successfully kicked " + name + "[" + params[0] + "]{" + ip + "} from the server.");
-			VCMP_PF->printf("[RCON]: Client (IP: %s) has kicked %s[%i]{%s} from the server.", ipaddr(c).c_str(), name.c_str(), id, ip.c_str());
+			VCMP_PF->LogMessage("[RCON]: Client (IP: %s) has kicked %s[%i]{%s} from the server.", ipaddr(c).c_str(), name.c_str(), id, ip.c_str());
 			VCMP_PF->KickPlayer(id);
 			return;
 		}
@@ -407,7 +407,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 				}
 			}
 			c->Send("Successfully banned " + name + "[" + params[0] + "]{" + ip + "} from the server.");
-			VCMP_PF->printf("[RCON]: Client (IP: %s) has banned %s[%i]{%s} from the server.", ipaddr(c).c_str(), name.c_str(), id, ip.c_str());
+			VCMP_PF->LogMessage("[RCON]: Client (IP: %s) has banned %s[%i]{%s} from the server.", ipaddr(c).c_str(), name.c_str(), id, ip.c_str());
 			VCMP_PF->BanPlayer(id);
 			return;
 		}
@@ -426,7 +426,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			}
 
 			c->Send("Successfully IPbanned {"+params[0]+"} from the server.");
-			VCMP_PF->printf("[RCON]: Client (IP: %s) has IPBanned {%s} from the server.", ipaddr(c).c_str(), params[0].c_str());
+			VCMP_PF->LogMessage("[RCON]: Client (IP: %s) has IPBanned {%s} from the server.", ipaddr(c).c_str(), params[0].c_str());
 			VCMP_PF->BanIP((char*) params[0].c_str());
 			return;
 		}
@@ -445,7 +445,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 			}
 
 			c->Send("Successfully unbanned {" + params[0] + "} from the server.");
-			VCMP_PF->printf("[RCON]: Client (IP: %s) has unbanned {%s} from the server.", ipaddr(c).c_str(), params[0].c_str());
+			VCMP_PF->LogMessage("[RCON]: Client (IP: %s) has unbanned {%s} from the server.", ipaddr(c).c_str(), params[0].c_str());
 			VCMP_PF->UnbanIP((char*)params[0].c_str());
 			return;
 		}
@@ -701,7 +701,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (params.size() == 0)
 			{
-				float gamespeed = VCMP_PF->GetGamespeed();
+				float gamespeed = VCMP_PF->GetGameSpeed();
 				c->Sendex("Game speed: %.3f", gamespeed);
 			}
 			else
@@ -716,7 +716,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 					c->Send("Syntax: gamespeed [new gamespeed]");
 					return;
 				}
-				VCMP_PF->SetGamespeed(gamespeed);
+				VCMP_PF->SetGameSpeed(gamespeed);
 				c->Sendex("Successfully set Game speed to %.3f!", gamespeed);
 			}
 		}
@@ -747,7 +747,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (params.size() == 0)
 			{
-				float maxheight = VCMP_PF->GetMaxHeight();
+				float maxheight = VCMP_PF->GetMaximumFlightAltitude();
 				c->Sendex("Max height: %.3f", maxheight);
 			}
 			else
@@ -762,7 +762,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 					c->Send("Syntax: maxheight [new maxheight]");
 					return;
 				}
-				VCMP_PF->SetMaxHeight(maxheight);
+				VCMP_PF->SetMaximumFlightAltitude(maxheight);
 				c->Sendex("Successfully set Max height to %.3f!", maxheight);
 			}
 		}
@@ -770,7 +770,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 		{
 			if (params.size() == 0)
 			{
-				int killcmddelay = VCMP_PF->GetKillCmdDelay();
+				int killcmddelay = VCMP_PF->GetKillCommandDelay();
 				c->Sendex("Kill command delay: %i", killcmddelay);
 			}
 			else
@@ -785,7 +785,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 					c->Send("Syntax: killcmddelay [new killcmddelay]");
 					return;
 				}
-				VCMP_PF->SetKillCmdDelay(killcmddelay);
+				VCMP_PF->SetKillCommandDelay(killcmddelay);
 				c->Sendex("Successfully set Kill command delay to %i!", killcmddelay);
 			}
 		}
@@ -834,7 +834,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 				c->Send("Error: toggle name not found.");
 				return;
 			}
-			vcmp_toggleables[params[0]]((unsigned int) ConfigUtils::GetBool(params[1]));
+			VCMP_PF->SetServerOption(vcmp_toggleables[params[0]], (unsigned int) ConfigUtils::GetBool(params[1]));
 			c->Sendex("Successfully toggled %s to %s!", params[0].c_str(), ConfigUtils::GetBool(params[1]) ? "true" : "false");
 		}
 		else ISCMD(listclients)
@@ -887,7 +887,7 @@ void RCON::OnRecv(Client* c, std::string msg)
 
 void RCON::OnClientDisconnect(Client* c)
 {
-	VCMP_PF->printf("A client has disconnected! (IP: %s)", ipaddr(c).c_str());
+	VCMP_PF->LogMessage("A client has disconnected! (IP: %s)", ipaddr(c).c_str());
 }
 
 Client* RCON::GetClient(int id)

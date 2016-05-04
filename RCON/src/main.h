@@ -52,7 +52,7 @@ extern "C"
 	EXPORT unsigned int VcmpPluginInit(PluginFuncs* pluginFuncs, PluginCallbacks* pluginCalls, PluginInfo* pluginInfo);
 }
 
-int OnInternalCommand(unsigned int uCmdType, const char* pszText);
+uint8_t OnInternalCommand(uint32_t uCmdType, const char* pszText);
 void OnShutdown();
 void OnSquirrelScriptLoad();
 
@@ -67,9 +67,8 @@ namespace ConfigUtils
 void GetRVersion(int* major, int* minor, int* patch, int* spatch);
 void GetRVersion(char* ret);
 
-typedef int (*TOGGLEABLEFUNCS)(unsigned int);
-extern std::map<std::string, TOGGLEABLEFUNCS> vcmp_toggleables;
-void InitializeToggleables(std::map<std::string, TOGGLEABLEFUNCS>* togs, PluginFuncs* pf);
+extern std::map<std::string, vcmpServerOption> vcmp_toggleables;
+void InitializeToggleables(std::map<std::string, vcmpServerOption>* togs, PluginFuncs* pf);
 
 #ifdef _WIN32
 typedef int socklen_t;

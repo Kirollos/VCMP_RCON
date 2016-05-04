@@ -24,12 +24,12 @@
 namespace Events
 {
 	void RegisterEvents(PluginCallbacks* vccb);
-	void OnPlayerConnect(int playerid);
-	void OnPlayerDisconnect(int playerid, int nReason);
-	void OnPlayerSpawn(int playerid);
-	void OnPlayerDeath(int playerid, int killerid, int reason, int bodypart);
-	int OnMessage(int playerid, const char* message);
-	int OnCommand(int playerid, const char* message);
+	void OnPlayerConnect(int32_t playerid);
+	void OnPlayerDisconnect(int32_t playerid, vcmpDisconnectReason nReason);
+	void OnPlayerSpawn(int32_t playerid);
+	void OnPlayerDeath(int32_t playerid, int32_t killerid, int32_t reason, vcmpBodyPart bodypart);
+	uint8_t OnMessage(int32_t playerid, const char* message);
+	uint8_t OnCommand(int32_t playerid, const char* message);
 }
 
 #endif
