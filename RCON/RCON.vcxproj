@@ -75,7 +75,7 @@
     <LibraryPath>$(ProjectDir)\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)</TargetName>
+    <TargetName>rcon04dbg32</TargetName>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
   </PropertyGroup>
@@ -85,7 +85,7 @@
     <LibraryPath>$(ProjectDir)\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)</TargetName>
+    <TargetName>rcon04dbg64</TargetName>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
   </PropertyGroup>
@@ -95,7 +95,7 @@
     <LibraryPath>$(ProjectDir)\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)</TargetName>
+    <TargetName>rcon04rel32</TargetName>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
   </PropertyGroup>
@@ -105,7 +105,7 @@
     <LibraryPath>$(ProjectDir)\lib\$(Platform)\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\</IntDir>
-    <TargetName>$(ProjectName)$(Platform)</TargetName>
+    <TargetName>rcon04rel64</TargetName>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
   </PropertyGroup>
@@ -128,7 +128,8 @@
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>move "$(SolutionDir)\$(Configuration)\RCONWin32.dll" "$(SolutionDir)\$(Configuration)\RCONx86.dll"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -177,7 +178,8 @@
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>move "$(SolutionDir)\$(Configuration)\RCONWin32.dll" "$(SolutionDir)\$(Configuration)\RCONx86.dll"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
